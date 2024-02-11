@@ -1,11 +1,7 @@
-import '../assets/styles/MainSection.scss'
+import '../assets/styles/MainSection.scss';
 
-const MainSection = () => {
-  return (
-    <main>
-      <h1>Tytaj będzie tekst strony</h1>
-    </main>
-  )
-}
+const MainSection = ({ children }) => {
+	return <section className='main'>{children}</section>;
+};
 
-export default MainSection
+export default MainSection;

@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import '../assets/styles/LoginForm.scss'
 
-const LoginForm = (onLogin) => {
+const LoginForm = ({onLogin}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

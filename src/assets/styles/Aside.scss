@@ -1,12 +1,12 @@
 .aside {
 	background-color: #1a1a1a; /* ciemne tło dla nagłówka */
 	color: #ffffff;
-	padding: 1rem 0;
+	padding: 1rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	width: 200px;
+	width: 250px;
 	height: 100vh;
 
 	nav {
@@ -26,7 +26,7 @@
 			transition: .2s;
 			margin-bottom: 2.5rem;
 			padding: 1rem 0;
-			border: 2px solid black;
+			border: 2px solid white;
 			border-radius: 20px;
 
 		}
