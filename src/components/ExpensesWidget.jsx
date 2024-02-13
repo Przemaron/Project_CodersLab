@@ -15,7 +15,7 @@ const ExpenseWidget = ({ expenses }) => {
   const lastThreeExpenses = getLastThreeExpenses(expenses);
   console.log(expenses); // Czy widzisz tutaj wydatki?
   return (
-    <div>
+    <div className='expenseWidget'>
       <h2>Podsumowanie wydatków</h2>
       <p>Suma wszystkich wydatków: {totalExpenses} zł</p>
       <h3>Ostatnie wydatki:</h3>
