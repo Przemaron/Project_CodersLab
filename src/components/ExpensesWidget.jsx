@@ -13,15 +13,15 @@ const ExpenseWidget = ({ expenses }) => {
 
   const totalExpenses = calculateTotalExpenses(expenses);
   const lastThreeExpenses = getLastThreeExpenses(expenses);
-  console.log(expenses); // Czy widzisz tutaj wydatki?
+  
   return (
     <div className='expenseWidget'>
       <h2>Podsumowanie wydatków</h2>
       <p>Suma wszystkich wydatków: {totalExpenses} zł</p>
       <h3>Ostatnie wydatki:</h3>
       <ul>
-        {lastThreeExpenses.map((expense, index) => (
-          <li key={index}>{`${expense.date} - ${expense.name} - ${expense.amount} zł`}</li>
+        {lastThreeExpenses.map((expense) => (
+          <li key={expense.id}>{`${expense.date} - ${expense.name} - ${expense.amount} zł`}</li>
         ))}
       </ul>
     </div>

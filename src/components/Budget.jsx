@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { supabase } from '../API/supabaseClient';
 import '../assets/styles/Budget.scss';
 
 const categories = [
@@ -22,10 +23,22 @@ const Budget = ({ expenses, setExpenses }) => {
 	const [isRecurring, setIsRecurring] = useState(false);
 	const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
 
-	const capitalizeFirstLetter = string => {
-		return string.charAt(0).toUpperCase() + string.slice(1);
-	};
+	// Pobieranie danych z Supabase
+	useEffect(() => {
+		const fetchData = async () => {
+			const { data, error } = await supabase.from('test').select();
+			console.log(data);
+			if (error) {
+				console.error('Błąd przy pobieraniu danych', error);
+			} else {
+				setExpenses(data || []);
+			}
+		};
 
+		fetchData();
+	}, [setExpenses]);
+
+	// Sortowanie wydatków
 	const sortExpenses = key => {
 		let direction = 'ascending';
 		if (sortConfig.key === key && sortConfig.direction === 'ascending') {
@@ -46,12 +59,37 @@ const Budget = ({ expenses, setExpenses }) => {
 		});
 	};
 
-	const handleSubmit = e => {
+	// Zmiana pierwszej litery na wielką
+	const capitalizeFirstLetter = string => {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	};
+
+	// Wysyłanie danych do Supabase
+	const handleSubmit = async e => {
 		e.preventDefault();
 		const newName = capitalizeFirstLetter(name);
 		const newExpense = { date, name: newName, category, amount: parseFloat(amount), isRecurring };
-		setExpenses([...expenses, newExpense]);
-		// Reset form
+
+		const { data, error } = await supabase.from('test').insert([newExpense]).select('*');
+
+		if (error) {
+			console.error('Błąd przy dodawaniu danych', error);
+		} else if (data && data.length > 0) {
+			setExpenses(prev => [...prev, ...data]);
+			setDate(new Date().toISOString().split('T')[0]);
+			setName('');
+			setCategory(categories[0]);
+			setAmount('');
+			setIsRecurring(false);
+		} else {
+			console.error('Nie otrzymano danych z Supabase');
+		}
+		// Czyszczenie formularza
+		resetForm();
+	};
+
+	// Resetowanie formularza
+	const resetForm = () => {
 		setDate(new Date().toISOString().split('T')[0]);
 		setName('');
 		setCategory(categories[0]);
@@ -59,13 +97,14 @@ const Budget = ({ expenses, setExpenses }) => {
 		setIsRecurring(false);
 	};
 
+	// Wskaźnik kierunku sortowania
 	const getSortDirectionIndicator = key => {
 		if (sortConfig.key !== key) {
 			return;
 		}
 		return sortConfig.direction === 'ascending' ? '↓' : '↑';
 	};
-
+	// Przygotowanie danych do tabeli
 	const prepareDataForTable = expenses => {
 		// Filtrowanie wydatków cyklicznych
 		const cyclicExpenses = expenses.filter(expense => expense.isRecurring);
@@ -90,13 +129,25 @@ const Budget = ({ expenses, setExpenses }) => {
 
 		return { uniqueMonths, monthlySums };
 	};
+	// Usuwanie wydatku
+	const removeExpense = async expenseToRemove => {
+		if (window.confirm('Czy na pewno chcesz usunąć ten wydatek?')) {
+			const { error } = await supabase.from('test').delete().match({ id: expenseToRemove.id });
+
+			if (error) {
+				console.error('Błąd przy usuwaniu danych', error);
+			} else {
+				setExpenses(expenses.filter(expense => expense !== expenseToRemove));
+			}
+		}
+	};
 
 	const { uniqueMonths, monthlySums } = prepareDataForTable(expenses);
 
 	return (
 		<div className='budget'>
 			<div style={{ width: '100%', display: 'flex' }}>
-				<div style={{width: '50%'}}>
+				<div style={{ width: '50%' }}>
 					<h2>Dodaj wydatek</h2>
 					<form onSubmit={handleSubmit}>
 						<label>
@@ -136,7 +187,7 @@ const Budget = ({ expenses, setExpenses }) => {
 						</div>
 					</form>
 				</div>
-				<div style={{width: '50%'}}>
+				<div style={{ width: '50%' }}>
 					<h3>Wydatki cykliczne z podziałem na miesiące</h3>
 					<div className='table-container'>
 						<table>
@@ -161,31 +212,41 @@ const Budget = ({ expenses, setExpenses }) => {
 
 			<h3>Lista wydatków</h3>
 			<div className='table-container'>
-				<table>
-					<thead>
-						<tr>
-							<th onClick={() => sortExpenses('date')}>Data {getSortDirectionIndicator('date')}</th>
-							<th onClick={() => sortExpenses('name')}>Nazwa wydatku {getSortDirectionIndicator('name')}</th>
-							<th onClick={() => sortExpenses('category')}>Kategoria {getSortDirectionIndicator('category')}</th>
-							<th onClick={() => sortExpenses('amount')}>Kwota {getSortDirectionIndicator('amount')}</th>
-							<th onClick={() => sortExpenses('isRecurring')}>Cykliczny {getSortDirectionIndicator('isRecurring')}</th>
-						</tr>
-					</thead>
-					<tbody>
-						{expenses.map((expense, index) => (
-							<tr key={index}>
-								<td>{expense.date}</td>
-								<td>{expense.name}</td>
-								<td>{expense.category}</td>
-								<td>{`${expense.amount} zł`}</td>
-								<td>{expense.isRecurring ? 'Tak' : 'Nie'}</td>
+				{expenses.length > 0 ? (
+					<table>
+						<thead>
+							<tr>
+								<th onClick={() => sortExpenses('date')}>Data {getSortDirectionIndicator('date')}</th>
+								<th onClick={() => sortExpenses('name')}>Nazwa wydatku {getSortDirectionIndicator('name')}</th>
+								<th onClick={() => sortExpenses('category')}>Kategoria {getSortDirectionIndicator('category')}</th>
+								<th onClick={() => sortExpenses('amount')}>Kwota {getSortDirectionIndicator('amount')}</th>
+								<th onClick={() => sortExpenses('isRecurring')}>
+									Cykliczny {getSortDirectionIndicator('isRecurring')}
+								</th>
+								<th>Akcja</th>
 							</tr>
-						))}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{expenses.map(expense => (
+								<tr key={expense.id}>
+									<td>{expense.date}</td>
+									<td>{expense.name}</td>
+									<td>{expense.category}</td>
+									<td>{`${expense.amount} zł`}</td>
+									<td>{expense.isRecurring ? 'Tak' : 'Nie'}</td>
+									<td>
+										<button className='expensesDeleteButton' onClick={() => removeExpense(expense)}>
+											Usuń
+										</button>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				) : (
+					<p>Nie znaleziono wydatków</p>
+				)}
 			</div>
-
-			<div></div>
 		</div>
 	);
 };

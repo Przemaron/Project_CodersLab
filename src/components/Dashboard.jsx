@@ -12,7 +12,7 @@ const Dashboard = ({expenses}) => {
 		const newSavings = income * (rate / 100);
 		setSaving(savings + newSavings);
 	};
-	console.log(expenses); // Czy dane dotarły tutaj?
+	
 	return (
 		<div className='dashboard' style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
 			<IncomeForm addSavings={addSavings} />

@@ -6,17 +6,11 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from '../components/Dashboard';
 import Budget from '../components/Budget';
 import '../assets/styles/App.scss';
-// import react router
-// import ApplicationAside from './app';
-// import AppSectionMain from './app';
-// import Balance - wyświetlanie stanu konta
-// import Add operation - włączane przyciskiem
-//
 
 const App = () => {
 	const [loggedIn, setLoggedIn] = useState(true); // false żeby zobaczyć formularz logowania
 	const [expenses, setExpenses] = useState([])
-	console.log(expenses); // Sprawdź aktualny stan wydatków
+	console.log('dane zaktualizowane w APP', expenses); // Sprawdź aktualny stan wydatków
 	return (
 		<div className='app'>
 			{!loggedIn ? (
