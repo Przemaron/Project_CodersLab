@@ -20,7 +20,7 @@ const App = () => {
 					<Aside />
 					<MainSection>
 						<Routes>
-							<Route path='/dashboard' element={<Dashboard expenses={expenses}/>} />
+							<Route path='/dashboard' element={<Dashboard expenses={expenses} setExpenses={setExpenses}/>} />	
 							<Route path='/budget' element={<Budget expenses={expenses} setExpenses={setExpenses}/>} />
 							{/* Możesz dodać więcej ścieżek i komponentów tutaj */}
 						</Routes>
