@@ -6,9 +6,8 @@ import SavingsWidget from './SavingsWidget';
 import { supabase } from '../API/supabaseClient';
 import '../assets/styles/Dashboard.scss';
 
-const Dashboard = ({ expenses, setExpenses }) => {
+const Dashboard = ({ expenses, setExpenses, incomes, setIncomes }) => {
 	const [savings, setSavings] = useState(0);
-	const [incomes, setIncomes] = useState([]);
 
 	const fetchExpensesIncomesAndSavings = async () => {
 		const { data: expensesData, error: expensesError } = await supabase

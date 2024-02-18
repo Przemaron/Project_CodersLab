@@ -10,6 +10,9 @@ import '../assets/styles/App.scss';
 const App = () => {
 	const [loggedIn, setLoggedIn] = useState(true); // false żeby zobaczyć formularz logowania
 	const [expenses, setExpenses] = useState([])
+	const [incomes, setIncomes] = useState([]);
+
+	console.log('incomes w app:', incomes);
 	console.log('dane zaktualizowane w APP', expenses); // Sprawdź aktualny stan wydatków
 	return (
 		<div className='app'>
@@ -20,8 +23,8 @@ const App = () => {
 					<Aside />
 					<MainSection>
 						<Routes>
-							<Route path='/dashboard' element={<Dashboard expenses={expenses} setExpenses={setExpenses}/>} />	
-							<Route path='/budget' element={<Budget expenses={expenses} setExpenses={setExpenses}/>} />
+							<Route path='/dashboard' element={<Dashboard expenses={expenses} setExpenses={setExpenses} incomes={incomes} setIncomes={setIncomes}/>} />	
+							<Route path='/budget' element={<Budget expenses={expenses} setExpenses={setExpenses} incomes={incomes} setIncomes={setIncomes}/>} />
 							{/* Możesz dodać więcej ścieżek i komponentów tutaj */}
 						</Routes>
 					</MainSection>

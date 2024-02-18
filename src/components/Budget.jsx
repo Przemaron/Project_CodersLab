@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../API/supabaseClient';
 import '../assets/styles/Budget.scss';
+import ExpensesPieChart from '../components/ExpensesPieChart.jsx';
 
 const categories = [
 	'dom',
@@ -15,14 +16,17 @@ const categories = [
 	'inne',
 ];
 
-const Budget = ({ expenses, setExpenses }) => {
+const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 	const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 	const [name, setName] = useState('');
 	const [category, setCategory] = useState(''); //
 	const [amount, setAmount] = useState('');
 	const [isRecurring, setIsRecurring] = useState(false);
 	const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+	const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Domyślnie bieżący miesiąc
+	const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Domyślnie bieżący rok
 
+	console.log('incomes: w budget', incomes);
 	// Pobieranie danych z Supabase
 	useEffect(() => {
 		const fetchData = async () => {
@@ -36,7 +40,7 @@ const Budget = ({ expenses, setExpenses }) => {
 		};
 
 		fetchData();
-	}, [setExpenses]);
+	}, [setExpenses, setIncomes]);
 
 	// Wstępna walidaca formularza i wysyłanie danych do Supabase
 	const handleSubmit = async e => {
@@ -65,6 +69,7 @@ const Budget = ({ expenses, setExpenses }) => {
 			}
 		}
 
+		// Dodawanie nowego wydatku
 		const newExpense = { date, name: newName, category, amount: parseFloat(amount), isRecurring };
 		const { data, error } = await supabase.from('test').insert([newExpense]).select();
 
@@ -128,46 +133,26 @@ const Budget = ({ expenses, setExpenses }) => {
 		});
 	};
 
-	// Wskaźnik kierunku sortowania
 	const getSortDirectionIndicator = key => {
 		if (sortConfig.key !== key) {
 			return;
 		}
 		return sortConfig.direction === 'ascending' ? '↓' : '↑';
 	};
+	// Wskaźnik kierunku sortowania
 
 	// Zmiana pierwszej litery na wielką
 	const capitalizeFirstLetter = string => {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	};
 
-	// Przygotowanie danych do tabeli wydatków cyklicznych
-	const prepareDataForTable = expenses => {
-		// Filtrowanie wydatków cyklicznych
-		const cyclicExpenses = expenses.filter(expense => expense.isRecurring);
-
-		// Zbieranie unikalnych miesięcy
-		const uniqueMonths = [
-			...new Set(
-				cyclicExpenses.map(expense =>
-					new Date(expense.date).toLocaleString('default', { month: 'long', year: 'numeric' })
-				)
-			),
-		].sort((a, b) => new Date(a) - new Date(b));
-
-		// Sumowanie wydatków dla każdego miesiąca
-		const monthlySums = uniqueMonths.map(month =>
-			cyclicExpenses
-				.filter(
-					expense => new Date(expense.date).toLocaleString('default', { month: 'long', year: 'numeric' }) === month
-				)
-				.reduce((sum, curr) => sum + curr.amount, 0)
-		);
-
-		return { uniqueMonths, monthlySums };
-	};
-
-	const { uniqueMonths, monthlySums } = prepareDataForTable(expenses);
+	// Filtrowanie operacji cyklicznych na podstawie wybranego miesiąca i roku
+	const filteredCyclicExpenses = expenses.filter(expense => {
+		const expenseDate = new Date(expense.date);
+		const expenseMonth = expenseDate.getMonth() + 1;
+		const expenseYear = expenseDate.getFullYear();
+		return expense.isRecurring && expenseMonth === selectedMonth && expenseYear === selectedYear;
+	});
 
 	return (
 		<div className='budget'>
@@ -215,67 +200,101 @@ const Budget = ({ expenses, setExpenses }) => {
 					</form>
 				</div>
 
-				{/*Tabela wydatków w danym miesiacu*/}
+				{/*Tabela wydatków*/}
 
-				<div style={{ width: '60%' }} className='table-container'>
-					<h3>Wydatki w tym miesiącu</h3>
-					{expenses.length > 0 ? (
-						<table>
-							<thead>
-								<tr>
-									<th onClick={() => sortExpenses('date')}>Data {getSortDirectionIndicator('date')}</th>
-									<th onClick={() => sortExpenses('name')}>Nazwa wydatku {getSortDirectionIndicator('name')}</th>
-									<th onClick={() => sortExpenses('category')}>Kategoria {getSortDirectionIndicator('category')}</th>
-									<th onClick={() => sortExpenses('amount')}>Kwota {getSortDirectionIndicator('amount')}</th>
-									<th onClick={() => sortExpenses('isRecurring')}>
-										Cykliczny {getSortDirectionIndicator('isRecurring')}
-									</th>
-									<th>Akcja</th>
-								</tr>
-							</thead>
-							<tbody>
-								{expenses.map(expense => (
-									<tr key={expense.id}>
-										<td>{expense.date}</td>
-										<td>{expense.name}</td>
-										<td>{expense.category}</td>
-										<td>{`${expense.amount} zł`}</td>
-										<td>{expense.isRecurring ? 'Tak' : 'Nie'}</td>
-										<td>
-											<button className='expensesDeleteButton' onClick={() => removeExpense(expense)}>
-												Usuń
-											</button>
-										</td>
+				<div style={{ width: '60%' }} className='tableCurrent-container'>
+					<h2>Wszystkie operacje</h2>
+					<div className='tableCurrent'>
+						{expenses.length > 0 ? (
+							<table>
+								<thead>
+									<tr>
+										<th onClick={() => sortExpenses('date')}>Data {getSortDirectionIndicator('date')}</th>
+										<th onClick={() => sortExpenses('name')}>Nazwa wydatku {getSortDirectionIndicator('name')}</th>
+										<th onClick={() => sortExpenses('category')}>Kategoria {getSortDirectionIndicator('category')}</th>
+										<th onClick={() => sortExpenses('amount')}>Kwota {getSortDirectionIndicator('amount')}</th>
+										<th onClick={() => sortExpenses('isRecurring')}>
+											Cykliczny {getSortDirectionIndicator('isRecurring')}
+										</th>
+										<th>Akcja</th>
 									</tr>
-								))}
-							</tbody>
-						</table>
-					) : (
-						<p>Nie znaleziono wydatków</p>
-					)}
+								</thead>
+								<tbody>
+									{expenses.map(expense => (
+										<tr key={expense.id}>
+											<td>{expense.date}</td>
+											<td>{expense.name}</td>
+											<td>{expense.category}</td>
+											<td>{`${expense.amount} zł`}</td>
+											<td>{expense.isRecurring ? 'Tak' : 'Nie'}</td>
+											<td>
+												<button className='expensesDeleteButton' onClick={() => removeExpense(expense)}>
+													Usuń
+												</button>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						) : (
+							<p>Nie znaleziono wydatków</p>
+						)}
+					</div>
 				</div>
 			</div>
 
 			{/*Tabela zaplanowanych wydatków */}
-
-			<div style={{ width: '50%' }} className='table-container'>
-				<h3>Wydatki zaplanowane</h3>
-				<table>
-					<thead>
-						<tr>
-							<th>Miesiąc</th>
-							<th>Suma wydatków cyklicznych</th>
-						</tr>
-					</thead>
-					<tbody>
-						{uniqueMonths.map((month, index) => (
-							<tr key={index}>
-								<td>{month}</td>
-								<td>{`${monthlySums[index]} zł`}</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+			<div style={{ width: '100%', display: 'flex' }}>
+				<div className='tableCycle-container' style={{ width: '40%' }}>
+					<h2>
+						Planowane wydatki ({selectedMonth}/{selectedYear})
+					</h2>
+					<div className='tableCycle-control'>
+						<label>
+							Wybierz miesiąc:
+							<select value={selectedMonth} onChange={e => setSelectedMonth(parseInt(e.target.value, 10))}>
+								{Array.from({ length: 12 }, (_, i) => (
+									<option key={i + 1} value={i + 1}>
+										{i + 1}
+									</option>
+								))}
+							</select>
+						</label>
+						<label>
+							Wybierz rok:
+							<select value={selectedYear} onChange={e => setSelectedYear(parseInt(e.target.value, 10))}>
+								{Array.from({ length: 5 }, (_, i) => (
+									<option key={i} value={new Date().getFullYear() - i}>
+										{new Date().getFullYear() - i}
+									</option>
+								))}
+							</select>
+						</label>
+					</div>
+					<div className='tableCycle'>
+						<table>
+							<thead>
+								<tr>
+									<th>Data</th>
+									<th>Nazwa</th>
+									<th>Kwota</th>
+								</tr>
+							</thead>
+							<tbody>
+								{filteredCyclicExpenses.map(expense => (
+									<tr key={expense.id}>
+										<td>{expense.date}</td>
+										<td>{expense.name}</td>
+										<td>{expense.amount} zł</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div style={{ width: '60%', height: '400px', display: 'flex', justifyContent: 'center' }}>
+					<ExpensesPieChart />
+				</div>
 			</div>
 		</div>
 	);

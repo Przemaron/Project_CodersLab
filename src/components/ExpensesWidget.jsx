@@ -1,6 +1,17 @@
 import '../assets/styles/ExpensesWidget.scss';
 
 const ExpenseWidget = ({ expenses }) => {
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth(); // Miesiące są indeksowane od 0
+
+  // Funkcja do filtrowania wydatków z bieżącego miesiąca
+  const filterCurrentMonthExpenses = (expenses) => {
+    return expenses.filter(expense => {
+      const expenseDate = new Date(expense.date);
+      return expenseDate.getFullYear() === currentYear && expenseDate.getMonth() === currentMonth;
+    });
+  };
+
   // Funkcja do obliczenia sumy wydatków
   const calculateTotalExpenses = (expenses) => {
     return expenses.reduce((sum, expense) => sum + expense.amount, 0);
@@ -11,17 +22,18 @@ const ExpenseWidget = ({ expenses }) => {
     return expenses.slice(-3).reverse();
   };
 
-  const totalExpenses = calculateTotalExpenses(expenses);
-  const lastThreeExpenses = getLastThreeExpenses(expenses);
+  const currentMonthExpenses = filterCurrentMonthExpenses(expenses);
+  const totalExpenses = calculateTotalExpenses(currentMonthExpenses);
+  const lastThreeExpenses = getLastThreeExpenses(currentMonthExpenses);
   
   return (
     <div className='expenseWidget'>
-      <h2>Podsumowanie wydatków</h2>
-      <p>Suma wszystkich wydatków: {totalExpenses} zł</p>
+      <h2>Podsumowanie wydatków (bieżący miesiąc)</h2>
+      <p>{totalExpenses.toFixed(2)} zł</p> {/* Dodano toFixed(2) dla formatowania */}
       <h3>Ostatnie wydatki:</h3>
       <ul>
         {lastThreeExpenses.map((expense) => (
-          <li key={expense.id}>{`${expense.date} - ${expense.name} - ${expense.amount} zł`}</li>
+          <li key={expense.id}>{`${expense.date} - ${expense.name} - ${expense.amount.toFixed(2)} zł`}</li> // Dodano toFixed(2)
         ))}
       </ul>
     </div>

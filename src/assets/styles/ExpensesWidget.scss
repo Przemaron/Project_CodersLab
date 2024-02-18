@@ -5,6 +5,7 @@
     align-items: center;    
     background-color: #1a1a1a; // Zmiana na jasne tło dla spójności
     width: 90%;
+    height: 68%;
     margin: auto; // Wyśrodkowanie widgetu
     padding: 2rem; // Dostosowanie paddingu
     border-radius: 3rem; // Miękkie zaokrąglenie
@@ -17,5 +18,22 @@
         color: #333; // Ciemniejszy kolor tekstu dla lepszej czytelności
     }
 
-    // Tutaj możesz dodać dodatkowe style dla innych elementów wewnątrz .expenseWidget
+    p {
+        font-size: 4rem;
+        font-weight: bold;
+    }
+
+    h3 {
+        text-align: center;
+        margin: 0 auto; // Zmniejszenie marginesu dla lepszego wykorzystania przestrzeni
+        font-size: 1.5rem; // Zmniejszenie rozmiaru fontu dla lepszej spójności
+        color: #333;
+    }
+
+    ul {
+        list-style: none; // Usunięcie domyślnej listy
+        font-size: 1.2rem;               
+    }
+
+
 }

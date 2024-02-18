@@ -59,7 +59,8 @@ const IncomeForm = ({ addSavings }) => {
 
 	return (
 		<form className='incomeForm' onSubmit={handleSubmit}>
-			<h2>Przychody w danym miesiącu: {monthlyIncomeTotal.toFixed(2)} zł</h2>
+			<h2>Przychody w danym miesiącu: </h2>
+			<p>{monthlyIncomeTotal.toFixed(2)} zł</p>
 			<input
 				type='number'
 				value={income}

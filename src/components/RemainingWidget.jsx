@@ -7,6 +7,7 @@ const RemainingWidget = ({ expenses, incomes }) => {
   const currentYear = now.getFullYear();
 
   // Filtruj przychody i wydatki dla bieżącego miesiąca
+  // Obliczanie przychodów
   const totalIncomes = incomes.reduce((acc, income) => {
     const incomeDate = new Date(income.date);
     if (incomeDate.getMonth() === currentMonth && incomeDate.getFullYear() === currentYear) {
@@ -15,6 +16,7 @@ const RemainingWidget = ({ expenses, incomes }) => {
     return acc;
   }, 0);
 
+  // Obliczanie wydatków
   const totalExpenses = expenses.reduce((acc, expense) => {
     const expenseDate = new Date(expense.date);
     if (expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear) {
