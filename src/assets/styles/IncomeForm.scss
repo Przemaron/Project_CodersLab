@@ -41,14 +41,15 @@
 
 	button {
 		cursor: pointer; // Kursor wskazujący na interaktywność
-		background-color: #1a1a1a; // Jasnoniebieskie tło
+		background-color: #007bff; // Jasnoniebieskie tło
 		color: #ffffff; // Biały tekst
 		border: 2px solid white; // Brak obramowania
 		border-radius: 20px; // Zaokrąglone rogi
-		padding: 1rem 4rem; // Wygodne paddingi
+		padding: .75rem 3rem; // Wygodne paddingi
 		margin-top: 1rem; // Odległość od ostatniego pola formularza
 		transition: background-color 0.3s; // Animacja zmiany koloru
-		font-size: 1rem;
+		font-family: 'Poppins', sans-serif;
+		font-size: 1.2rem;
 		font-weight: bold;
 
 		&:hover {

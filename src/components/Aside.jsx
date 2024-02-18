@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import '../assets/styles/Aside.scss';
+import DateTimeDisplay from './DateAndTime';
 
 const Aside = () => {
 	return (
@@ -10,7 +11,8 @@ const Aside = () => {
 				<Link to='/budget'>Budget</Link>
 				<Link to='/how-to'>How to</Link>
 			</nav>
-		</aside> // Fix: Replace <aside/> with </aside>
+			<DateTimeDisplay />
+		</aside>
 	);
 };
 

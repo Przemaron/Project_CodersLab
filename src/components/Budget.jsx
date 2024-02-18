@@ -26,11 +26,10 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 	const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Domyślnie bieżący miesiąc
 	const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Domyślnie bieżący rok
 
-	console.log('incomes: w budget', incomes);
 	// Pobieranie danych z Supabase
 	useEffect(() => {
 		const fetchData = async () => {
-			const { data, error } = await supabase.from('test').select();
+			const { data, error } = await supabase.from('expensesTable').select();
 			console.log(data);
 			if (error) {
 				console.error('Błąd przy pobieraniu danych', error);
@@ -71,7 +70,7 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 
 		// Dodawanie nowego wydatku
 		const newExpense = { date, name: newName, category, amount: parseFloat(amount), isRecurring };
-		const { data, error } = await supabase.from('test').insert([newExpense]).select();
+		const { data, error } = await supabase.from('expensesTable').insert([newExpense]).select();
 
 		if (error) {
 			console.error('Błąd przy dodawaniu danych', error);

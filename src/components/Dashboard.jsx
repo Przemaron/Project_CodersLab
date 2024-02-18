@@ -11,7 +11,7 @@ const Dashboard = ({ expenses, setExpenses, incomes, setIncomes }) => {
 
 	const fetchExpensesIncomesAndSavings = async () => {
 		const { data: expensesData, error: expensesError } = await supabase
-			.from('test') // Nazwa tabeli w Supabase
+			.from('expensesTable') // Nazwa tabeli w Supabase
 			.select('*');
 
 		if (expensesError) {

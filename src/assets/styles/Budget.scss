@@ -90,19 +90,20 @@ input[type='number']::-ms-reveal {
 				cursor: pointer;
 				background-color: #007bff;
 				color: #ffffff;
-				border: none;
-				border-radius: 10px;
-				padding: 0.75rem 1.5rem;
+				border: 1px solid white;
+				border-radius: 20px;
+				padding: 0.5rem 1.5rem;
+				font-family: 'Poppins', sans-serif;
 				font-size: 1rem;
 				font-weight: 600;
 				letter-spacing: 0.05rem;
-				transition: background-color 0.3s, transform 0.3s;
+				transition: background-color 0.3s;
 				align-self: center;
-				// margin-top: 1rem;
 
 				&:hover {
-					background-color: #0056b3;
-					transform: translateY(-2px);
+					background-color: white;
+					color: black;
+					box-shadow: 0px 0px 5px white;
 				}
 			}
 		}
@@ -110,7 +111,7 @@ input[type='number']::-ms-reveal {
 
 	.tableCurrent-container {
 		width: 100%;
-        height: 400px;
+		height: 400px;
 		.tableCurrent {
 			max-height: 364px;
 			overflow-y: auto;
@@ -142,36 +143,33 @@ input[type='number']::-ms-reveal {
 					background-color: #121212; // Naprzemienny kolor tła dla rzędów
 				}
 
-				tr:hover {
-					background-color: #ddd; // Subtelna zmiana tła przy najechaniu
-					color: #121212;
-				}
-
 				.expensesDeleteButton {
 					cursor: pointer;
 					background-color: #007bff;
 					color: #ffffff;
-					border: none;
-					border-radius: 10px;
-					padding: 0.5rem 1rem;
+					border: 1px solid white;
+					border-radius: 20px;
+					padding: 0.5rem 1.5rem;
+					font-family: 'Poppins', sans-serif;
 					font-size: 1rem;
 					font-weight: 600;
 					letter-spacing: 0.05rem;
-					transition: background-color 0.3s, transform 0.3s;
+					transition: background-color 0.3s;
 
 					&:hover {
-						background-color: #0056b3;
-						transform: translateY(-2px);
+						color: black;
+						background-color: white;
+						box-shadow: 0px 0px 5px white;
 					}
 				}
 			}
 		}
 	}
 	.tableCycle-container {
-        width: 100%;
+		width: 100%;
 
-		h2{
-			text-align: center;
+		h2 {
+			text-align: start;
 			margin-top: 2rem;
 		}
 
@@ -183,17 +181,16 @@ input[type='number']::-ms-reveal {
 			margin-top: 20px;
 			font-size: 1rem;
 
-			select {	
+			select {
 				font-size: 1rem;
 				margin-left: 1rem;
 				margin-bottom: 1rem;
-				padding: 0.2rem .5rem;
+				padding: 0.2rem 0.5rem;
 			}
-
 		}
 
 		.tableCycle {
-            overflow-y: auto;
+			overflow-y: auto;
 			height: 200px;
 			table {
 				width: 100%;
@@ -220,29 +217,6 @@ input[type='number']::-ms-reveal {
 
 				tr:nth-child(even) {
 					background-color: #121212; // Naprzemienny kolor tła dla rzędów
-				}
-
-				tr:hover {
-					background-color: #ddd; // Subtelna zmiana tła przy najechaniu
-					color: #121212;
-				}
-
-				.expensesDeleteButton {
-					cursor: pointer;
-					background-color: #007bff;
-					color: #ffffff;
-					border: none;
-					border-radius: 10px;
-					padding: 0.5rem 1rem;
-					font-size: 1rem;
-					font-weight: 600;
-					letter-spacing: 0.05rem;
-					transition: background-color 0.3s, transform 0.3s;
-
-					&:hover {
-						background-color: #0056b3;
-						transform: translateY(-2px);
-					}
 				}
 			}
 		}
