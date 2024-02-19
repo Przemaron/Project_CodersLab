@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../API/supabaseClient';
 import '../assets/styles/Budget.scss';
-import ExpensesPieChart from '../components/ExpensesPieChart.jsx';
+import ExpensesPieChart from './ExpensesBarChart.jsx';
 
 const categories = [
 	'dom',
@@ -308,7 +308,7 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 
 				{/*Wykres kołowy wydatków*/}
 
-				<div style={{ width: '60%', height: '400px', display: 'flex', justifyContent: 'center' }}>
+				<div style={{ width: '60%', height: '500px', display: 'flex', justifyContent: 'center'}}>
 					<ExpensesPieChart />
 				</div>
 			</div>
