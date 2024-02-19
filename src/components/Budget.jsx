@@ -16,16 +16,18 @@ const categories = [
 	'inne',
 ];
 
-const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
+const Budget = ({ expenses, setExpenses, setIncomes }) => {
 	const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 	const [name, setName] = useState('');
 	const [category, setCategory] = useState(''); //
 	const [amount, setAmount] = useState('');
 	const [isRecurring, setIsRecurring] = useState(false);
 	const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
-	const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Domyślnie bieżący miesiąc
-	const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Domyślnie bieżący rok
-
+	const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+	const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+	const currentDate = new Date();
+	const selectedDate = new Date(date);
+	
 	// Pobieranie danych z Supabase
 	useEffect(() => {
 		const fetchData = async () => {
@@ -41,12 +43,20 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 		fetchData();
 	}, [setExpenses, setIncomes]);
 
-	// Wstępna walidaca formularza i wysyłanie danych do Supabase
+	// Sprawdzanie czy data wydatku jest z przyszłości (poza bieżącym miesiącem)
+	useEffect(() => {
+		if (
+			(selectedDate.getMonth() > currentDate.getMonth() && selectedDate.getFullYear() === currentDate.getFullYear()) ||
+			selectedDate.getFullYear() > currentDate.getFullYear()
+		) {
+			setIsRecurring(true);
+		} 
+	}, [selectedDate, currentDate]); // Zależności: aktualizuj, gdy `selectedDate` lub `currentDate` się zmieniają
+
+	// Wysyłanie danych do Supabase
 	const handleSubmit = async e => {
 		e.preventDefault();
 		const newName = capitalizeFirstLetter(name);
-		const currentDate = new Date();
-		const selectedDate = new Date(date);
 
 		// Walidacja daty - sprawdzanie czy data nie jest z przeszłości (poza bieżącym miesiącem)
 		if (
@@ -55,17 +65,6 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 		) {
 			alert('Nie można dodać operacji z miesiąca minionego.');
 			return;
-		}
-
-		// Walidacja dla operacji na miesiące przyszłe (tylko cykliczne)
-		if (
-			(selectedDate.getMonth() > currentDate.getMonth() && selectedDate.getFullYear() === currentDate.getFullYear()) ||
-			selectedDate.getFullYear() > currentDate.getFullYear()
-		) {
-			if (!isRecurring) {
-				alert('Operacje na miesiące przyszłe mogą być dodawane tylko jako operacje cykliczne.');
-				return;
-			}
 		}
 
 		// Dodawanie nowego wydatku
@@ -156,7 +155,6 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 	return (
 		<div className='budget'>
 			<div style={{ width: '100%', display: 'flex' }}>
-
 				{/*Formularz dodawania wydatku*/}
 
 				<div style={{ width: '50%' }}>
@@ -249,9 +247,8 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 										<th onClick={() => sortExpenses('isRecurring')}>
 											Cykliczny {getSortDirectionIndicator('isRecurring')}
 										</th>
-										<th>Akcja</th>
 									</tr>
-								</thead>								
+								</thead>
 							</table>
 						)}
 					</div>
@@ -261,7 +258,7 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 			{/*Tabela zaplanowanych wydatków */}
 
 			<div style={{ width: '100%', display: 'flex' }}>
-				<div className='tableCycle-container' style={{ width: '40%' }}>
+				<div className='tableCycle-container' style={{ width: '40%', marginRight: '2rem'}}>
 					<h2>
 						Planowane wydatki ({selectedMonth}/{selectedYear})
 					</h2>

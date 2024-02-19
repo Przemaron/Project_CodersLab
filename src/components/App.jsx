@@ -6,10 +6,11 @@ import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Dashboard from '../components/Dashboard';
 import Budget from '../components/Budget';
 import '../assets/styles/App.scss';
+import {useAuth} from '../components/AuthProvider';
 
 const App = () => {
-	const [loggedIn, setLoggedIn] = useState(true); // false żeby zobaczyć formularz logowania
-	
+	// const [loggedIn, setLoggedIn] = useState(false);
+	const { user } = useAuth();
 	const [expenses, setExpenses] = useState([])
 	const [incomes, setIncomes] = useState([]);
 
@@ -17,8 +18,8 @@ const App = () => {
 	console.log('dane zaktualizowane w APP', expenses); // Sprawdź aktualny stan wydatków
 	return (
 		<div className='app'>
-			{!loggedIn ? (
-				<LoginForm onLogin={setLoggedIn} />
+			{!user ? (
+				<LoginForm />
 			) : (
 				<Router>
 					<Aside />

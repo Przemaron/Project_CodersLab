@@ -18,13 +18,13 @@ const ExpenseWidget = ({ expenses }) => {
   };
 
   // Funkcja do pobrania trzech ostatnich wydatków
-  const getLastThreeExpenses = (expenses) => {
-    return expenses.slice(-3).reverse();
+  const getLastExpenses = (expenses) => {
+    return expenses.slice(-5).reverse();
   };
 
   const currentMonthExpenses = filterCurrentMonthExpenses(expenses);
   const totalExpenses = calculateTotalExpenses(currentMonthExpenses);
-  const lastThreeExpenses = getLastThreeExpenses(currentMonthExpenses);
+  const lastThreeExpenses = getLastExpenses(currentMonthExpenses);
   
   return (
     <div className='expenseWidget'>

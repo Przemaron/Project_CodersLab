@@ -1,8 +1,7 @@
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import './assets/styles/index.scss';
-// import react router
-
+import { AuthProvider} from '../src/components/AuthProvider';
 
 //Tutaj będzie lOGIN
 //walidacja loginu
@@ -11,5 +10,8 @@ import './assets/styles/index.scss';
 
 //router => login, aplikacja
 
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(
+	<AuthProvider>
+		<App />
+	</AuthProvider>
+);

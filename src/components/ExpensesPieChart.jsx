@@ -1,77 +1,109 @@
 import { useEffect, useState } from 'react';
-import { Pie } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
-import { supabase } from '../API/supabaseClient'; // Zaimportuj klienta Supabase
+import { supabase } from '../API/supabaseClient';
 
-const ExpensesPieChart = () => {
-	const [totalExpenses, setTotalExpenses] = useState(0);
-	const [remainingIncome, setRemainingIncome] = useState(0);
+const ExpensesBarChart = () => {
+    const [chartData, setChartData] = useState({
+        labels: [],
+        datasets: [],
+    });
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const currentYear = new Date().getFullYear();
-			const currentMonth = new Date().getMonth(); // Pamiętaj, getMonth() zwraca miesiące od 0 do 11
+    // Kolor dla przychodów
+    const incomeColor = {
+        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+    };
 
-			// Pobieranie wydatków
-			const { data: expensesData } = await supabase
-				.from('expensesTable')
-				.select('*')
-				.gte('date', new Date(currentYear, currentMonth, 1).toISOString())
-				.lte('date', new Date(currentYear, currentMonth + 1, 0).toISOString());
+    // Funkcja do generowania kolorów dla wydatków
+    const generateExpenseColor = (index) => {
+        const hue = index * 137; // Złota proporcja dla różnorodności kolorów
+        return `hsla(${hue % 360}, 70%, 70%, 0.5)`;
+    };
 
-			// Pobieranie przychodów
-			const { data: incomesData } = await supabase
-				.from('incomeTable')
-				.select('*')
-				.gte('date', new Date(currentYear, currentMonth, 1).toISOString())
-				.lte('date', new Date(currentYear, currentMonth + 1, 0).toISOString());
+    useEffect(() => {
+        const fetchData = async () => {
+            const currentYear = new Date().getFullYear();
+            const currentMonth = new Date().getMonth();
 
-			// Obliczanie sumy wydatków i przychodów
-			const expensesSum = expensesData?.reduce((acc, curr) => acc + curr.amount, 0) || 0;
-			const incomesSum = incomesData?.reduce((acc, curr) => acc + curr.amount, 0) || 0;
+            // Pobieranie wydatków
+            const { data: expensesData } = await supabase
+                .from('expensesTable')
+                .select('*')
+                .gte('date', new Date(currentYear, currentMonth, 1).toISOString())
+                .lte('date', new Date(currentYear, currentMonth + 1, 0).toISOString());
 
-			setTotalExpenses(expensesSum);
-			setRemainingIncome(incomesSum - expensesSum);
-		};
+            // Pobieranie przychodów
+            const { data: incomesData } = await supabase
+                .from('incomeTable')
+                .select('*')
+                .gte('date', new Date(currentYear, currentMonth, 1).toISOString())
+                .lte('date', new Date(currentYear, currentMonth + 1, 0).toISOString());
 
-		fetchData();
-	}, []);
+            // Obliczanie łącznej sumy przychodów
+            const totalIncome = incomesData.reduce((acc, curr) => acc + curr.amount, 0);
 
-	// Przygotowanie danych do wykresu
-	const data = {
-		labels: ['Wydatki', 'Pozostały przychód'],
-		datasets: [
-			{
-				data: [totalExpenses, Math.max(remainingIncome, 0)],
-				backgroundColor: ['#FF6384', '#36A2EB'],
-				hoverBackgroundColor: ['#FF6384', '#36A2EB'],
-			},
-		],
-	};
+            // Grupowanie wydatków po kategorii
+            const expensesByCategory = expensesData.reduce((acc, curr) => {
+                const { category, amount } = curr;
+                acc[category] = (acc[category] || 0) + amount;
+                return acc;
+            }, {});
 
-	// Opcje wykresu
-	const options = {
-		plugins: {
-			legend: {
-				display: true,
-				position: 'top',
-				labels: {
-					font: {
-						size: 16,
-					},
-				},
-			},
-			title: {
-				display: true,
-				text: 'Porównanie wydatków do przychodu',
-				font: {
-					size: 20,
-				},
-			},
-		},
-	};
+            const categories = Object.keys(expensesByCategory);
+            const expensesSums = Object.values(expensesByCategory);
+            const expenseColors = categories.map((_, index) => generateExpenseColor(index));
 
-	return <Pie data={data} options={options} />;
+            // Ustawienie danych dla wykresu
+            setChartData({
+                labels: categories,
+                datasets: [
+                    // Dataset dla przychodów
+                    {
+                        label: 'Przychody',
+                        data: Array(categories.length).fill(totalIncome),
+                        backgroundColor: incomeColor.backgroundColor,
+                        borderColor: incomeColor.borderColor,
+                        borderWidth: 1,
+                    },
+                    // Dataset dla wydatków
+                    {
+                        label: 'Wydatki',
+                        data: expensesSums,
+                        backgroundColor: expenseColors,
+                        borderColor: expenseColors,
+                        borderWidth: 1,
+                    }
+                ],
+            });
+        };
+
+        fetchData();
+    }, []);
+
+    // Opcje wykresu
+    const options = {
+        scales: {
+            y: {
+                beginAtZero: true,
+            },
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Porównanie przychodów i wydatków według kategorii',
+                font: {
+                    size: 20,
+                },
+            },
+        },
+    };
+
+    return <Bar data={chartData} options={options} />;
 };
 
-export default ExpensesPieChart;
+export default ExpensesBarChart;

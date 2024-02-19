@@ -1,52 +1,86 @@
 .login-form-container {
+	display: flex;
+	width: 100vw;
+	justify-content: center;
+	align-items: center;
+	flex-grow: 1; /* rozciąga się, aby zająć dostępną przestrzeń */
+	z-index: 1;
+  
+	.login-form {
     display: flex;
-    width: 100vw;  
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1; /* rozciąga się, aby zająć dostępną przestrzeń */
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 4rem;
-    background-color: #232323; /* nieco jaśniejsze tło dla formularza */
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  }
-  
-  .login-form label,
-  .login-form input {
-    display: block;
-    margin-bottom: 1rem;
-  }
-  
-  .login-form input {
-    padding: 0.5rem;
-    background-color: #2c2c2c; /* ciemne tło inputu */
-    border: 1px solid #444; /* ciemna obramówka */
-    color: #ffffff; /* jasny tekst */;
-    transition: .3s;
-  }
-  
-  .login-form input:active {
-    border: 1px solid white;
-  }
-  
-  .login-form button {
-    padding: 0.5rem 1rem;
-    background-color: #333;
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: .3s;
-  }
-  
-  .login-form button:hover {
-    background-color: #444;
-    box-shadow: 0px 0px 15px white;
-  }
-  
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 2rem 3rem 3rem;
+		background-color: rgb(35, 35, 35, .25);
+    backdrop-filter: blur(15px);
+     /* nieco jaśniejsze tło dla formularza */
+		border-radius: 5px;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    
+
+		h2 {
+			margin-bottom: 2rem;
+			font-size: 2rem;
+		}
+
+		button {
+			padding: 0.5rem 1.5rem;
+			background-color: #007bff;
+			color: #ffffff;
+      font-weight: 600;
+      font-size: 1rem;
+			border: none;
+			cursor: pointer;
+			margin-top: 10px;
+			transition: 0.3s;
+
+			&:hover {
+        background-color: white;
+        color: black;
+        box-shadow: 0px 0px 5px white;
+      }
+		}
+
+		label,
+		input {
+			display: block;
+			margin-bottom: 1rem;
+		}
+
+		input {
+			padding: 0.5rem;
+			width: 300px;
+			background-color: #2c2c2c; /* ciemne tło inputu */
+			border: 1px solid #444; /* ciemna obramówka */
+			color: #ffffff; /* jasny tekst */
+			transition: 0.3s;
+
+			&:active {
+				border: 1px solid white;
+			}
+		}
+	}
+}
+
+.formCircleUp {
+	width: 250px;
+	height: 250px;
+	background-color: #007bff;
+	border-radius: 50%;
+	position: relative;
+	z-index: -1;
+	left: 150px;
+	top: -150px;
+}
+
+.formCircleDown {
+	width: 250px;
+	height: 250px;
+	background-color: #007bff;
+	border-radius: 50%;
+	position: relative;
+	right: 150px;
+	bottom: -150px;
+	z-index: -1;
+}
