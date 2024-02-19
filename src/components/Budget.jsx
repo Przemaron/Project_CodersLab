@@ -101,7 +101,7 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 	// Usuwanie wydatku
 	const removeExpense = async expenseToRemove => {
 		if (window.confirm('Czy na pewno chcesz usunąć ten wydatek?')) {
-			const { error } = await supabase.from('test').delete().match({ id: expenseToRemove.id });
+			const { error } = await supabase.from('expensesTable').delete().match({ id: expenseToRemove.id });
 
 			if (error) {
 				console.error('Błąd przy usuwaniu danych', error);
@@ -156,6 +156,9 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 	return (
 		<div className='budget'>
 			<div style={{ width: '100%', display: 'flex' }}>
+
+				{/*Formularz dodawania wydatku*/}
+
 				<div style={{ width: '50%' }}>
 					<h2>Dodaj wydatek</h2>
 					<form onSubmit={handleSubmit}>
@@ -202,7 +205,7 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 				{/*Tabela wydatków*/}
 
 				<div style={{ width: '60%' }} className='tableCurrent-container'>
-					<h2>Wszystkie operacje</h2>
+					<h2>Wszystkie wydatki</h2>
 					<div className='tableCurrent'>
 						{expenses.length > 0 ? (
 							<table>
@@ -236,13 +239,27 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 								</tbody>
 							</table>
 						) : (
-							<p>Nie znaleziono wydatków</p>
+							<table>
+								<thead>
+									<tr>
+										<th onClick={() => sortExpenses('date')}>Data {getSortDirectionIndicator('date')}</th>
+										<th onClick={() => sortExpenses('name')}>Nazwa wydatku {getSortDirectionIndicator('name')}</th>
+										<th onClick={() => sortExpenses('category')}>Kategoria {getSortDirectionIndicator('category')}</th>
+										<th onClick={() => sortExpenses('amount')}>Kwota {getSortDirectionIndicator('amount')}</th>
+										<th onClick={() => sortExpenses('isRecurring')}>
+											Cykliczny {getSortDirectionIndicator('isRecurring')}
+										</th>
+										<th>Akcja</th>
+									</tr>
+								</thead>								
+							</table>
 						)}
 					</div>
 				</div>
 			</div>
 
 			{/*Tabela zaplanowanych wydatków */}
+
 			<div style={{ width: '100%', display: 'flex' }}>
 				<div className='tableCycle-container' style={{ width: '40%' }}>
 					<h2>
@@ -291,6 +308,9 @@ const Budget = ({ expenses, setExpenses, incomes, setIncomes }) => {
 						</table>
 					</div>
 				</div>
+
+				{/*Wykres kołowy wydatków*/}
+
 				<div style={{ width: '60%', height: '400px', display: 'flex', justifyContent: 'center' }}>
 					<ExpensesPieChart />
 				</div>

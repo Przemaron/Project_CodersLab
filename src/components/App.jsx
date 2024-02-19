@@ -2,13 +2,14 @@ import { useState } from 'react';
 import Aside from '../components/Aside';
 import LoginForm from '../components/LoginForm';
 import MainSection from '../components/MainSection';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Dashboard from '../components/Dashboard';
 import Budget from '../components/Budget';
 import '../assets/styles/App.scss';
 
 const App = () => {
 	const [loggedIn, setLoggedIn] = useState(true); // false żeby zobaczyć formularz logowania
+	
 	const [expenses, setExpenses] = useState([])
 	const [incomes, setIncomes] = useState([]);
 
