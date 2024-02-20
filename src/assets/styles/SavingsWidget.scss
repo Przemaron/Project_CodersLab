@@ -3,9 +3,9 @@
     flex-direction: column;    
     justify-content: center;
     align-items: center;    
-    background-color: #1a1a1a; // Zmiana na jasne tło dla spójności
+    background-color: #1a1a1a;
     width: 90%;
-    height: 90%;
+    height: 70%;
     margin: auto; // Wyśrodkowanie widgetu
     padding: 2rem 1rem; // Dostosowanie paddingu
     border-radius: 3rem; // Miękkie zaokrąglenie
@@ -15,7 +15,7 @@
     h2 {
         margin-bottom: 1rem; // Zmniejszenie marginesu dla lepszego wykorzystania przestrzeni
         font-size: 2.5rem; // Zmniejszenie rozmiaru fontu dla lepszej spójności
-        color: #333; // Ciemniejszy kolor tekstu dla lepszej czytelności
+        color: #888; // Ciemniejszy kolor tekstu dla lepszej czytelności
     }
 
     p {

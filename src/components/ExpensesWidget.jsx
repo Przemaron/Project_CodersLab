@@ -28,7 +28,7 @@ const ExpenseWidget = ({ expenses }) => {
   
   return (
     <div className='expenseWidget'>
-      <h2>Podsumowanie wydatków (bieżący miesiąc)</h2>
+      <h2>Wydatki (bieżący miesiąc)</h2>
       <p>{totalExpenses.toFixed(2)} zł</p> {/* Dodano toFixed(2) dla formatowania */}
       <h3>Ostatnie wydatki:</h3>
       <ul>

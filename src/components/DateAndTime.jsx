@@ -16,10 +16,17 @@ const DateTimeDisplay = () => {
     };
   }, []);
 
+  // Opcje lokalizacji dla języka polskiego
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  
+  // Formatowanie daty i czasu zgodnie z lokalizacją PL
+  const formattedDate = currentDateTime.toLocaleDateString('pl-PL', options);
+  const formattedTime = currentDateTime.toLocaleTimeString('pl-PL');
+
   return (
     <div className='asideDateAndTime' style={{textAlign: 'center', marginBottom: '1rem'}}>
-      <p style={{fontSize: '1.2rem'}}>{currentDateTime.toLocaleDateString()}</p>
-      <p style={{fontSize: '2rem'}}>{currentDateTime.toLocaleTimeString()}</p>
+      <p style={{fontSize: '1.2rem'}}>{formattedDate}</p>
+      <p style={{fontSize: '2rem'}}>{formattedTime}</p>
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../API/supabaseClient';
 import '../assets/styles/Budget.scss';
-import ExpensesPieChart from './ExpensesBarChart.jsx';
+import ExpensesBarChart from '../components/ExpensesBarChart';
 
 const categories = [
 	'dom',
 	'zakupy',
-	'bar/rozrywka/jedzenie na mieście',
+	'bar/rozrywka',
 	'transport',
 	'paliwo',
 	'rozwój',
@@ -57,6 +57,20 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 	const handleSubmit = async e => {
 		e.preventDefault();
 		const newName = capitalizeFirstLetter(name);
+		
+
+		// Sprawdzenie, czy wszystkie pola zostały wypełnione
+		if (!name.trim() || !category.trim() || !amount.trim()) {
+			alert('Wszystkie pola są wymagane.');
+			return;
+		}
+
+		// Walidacja kwoty - sprawdzenie, czy zawiera tylko liczby
+		const parsedAmount = parseFloat(amount);
+		if (isNaN(parsedAmount) || parsedAmount <= 0) {
+			alert('Kwota musi być dodatnią liczbą.');
+			return;
+		}
 
 		// Walidacja daty - sprawdzanie czy data nie jest z przeszłości (poza bieżącym miesiącem)
 		if (
@@ -309,7 +323,7 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 				{/*Wykres kołowy wydatków*/}
 
 				<div style={{ width: '60%', height: '500px', display: 'flex', justifyContent: 'center'}}>
-					<ExpensesPieChart />
+					<ExpensesBarChart />
 				</div>
 			</div>
 		</div>

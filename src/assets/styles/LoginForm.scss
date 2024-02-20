@@ -5,41 +5,48 @@
 	align-items: center;
 	flex-grow: 1; /* rozciąga się, aby zająć dostępną przestrzeń */
 	z-index: 1;
-  
+
 	.login-form {
-    display: flex;
+		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		padding: 2rem 3rem 3rem;
-		background-color: rgb(35, 35, 35, .25);
-    backdrop-filter: blur(15px);
-     /* nieco jaśniejsze tło dla formularza */
+		background-color: rgb(35, 35, 35, 0.25);
+		backdrop-filter: blur(15px);
 		border-radius: 5px;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    
 
 		h2 {
 			margin-bottom: 2rem;
 			font-size: 2rem;
+		}
+		
+		.fa-right-to-bracket {
+			margin-right: 1rem;
 		}
 
 		button {
 			padding: 0.5rem 1.5rem;
 			background-color: #007bff;
 			color: #ffffff;
-      font-weight: 600;
-      font-size: 1rem;
+			font-weight: 600;
+			font-size: 1rem;
 			border: none;
+			border-radius: 20px;
 			cursor: pointer;
 			margin-top: 10px;
 			transition: 0.3s;
 
 			&:hover {
-        background-color: white;
-        color: black;
-        box-shadow: 0px 0px 5px white;
-      }
+				background-color: white;
+				color: black;
+				box-shadow: 0px 0px 5px white;
+
+				&:active {
+					transform: scale(0.95);
+				}
+			}
 		}
 
 		label,
@@ -53,6 +60,7 @@
 			width: 300px;
 			background-color: #2c2c2c; /* ciemne tło inputu */
 			border: 1px solid #444; /* ciemna obramówka */
+			border-radius: 20px;
 			color: #ffffff; /* jasny tekst */
 			transition: 0.3s;
 

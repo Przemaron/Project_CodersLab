@@ -6,9 +6,14 @@
 	flex-direction: column;
 	justify-content: space-around;
 	align-items: center;
-	width: 250px;
+	width: 300px;
 	height: 100vh;
 	gap: 10rem;
+
+	.fa-solid{
+		margin-right: 1rem;
+		font-size: 1.5rem;
+	}
 
 	nav {
 		display: flex;
@@ -42,6 +47,42 @@
 			text-decoration: none;
 			border: 2px solid white;
 			box-shadow: 0px 0px 5px white;
+			
+			&:active {
+				transform: scale(0.95);
+			}
 		}
+
+	}
+
+	.logOutButton {
+		display: inline-block;
+		width: 90%;
+		color: #ffffff;
+		text-decoration: none;
+		text-align: center;
+		transition: .2s;
+		margin-bottom: 2.5rem;
+		padding: 1rem 0;
+		border: 2px solid white;
+		border-radius: 20px;
+		background-color: #007bff;
+		font-weight: bold;
+		font-size: 1.2rem;
+		cursor: pointer;
+
+		&:hover {
+			text-decoration: underline;
+			background-color: white;
+			color: black;
+			text-decoration: none;
+			border: 2px solid white;
+			box-shadow: 0px 0px 5px white;
+		}
+
+		&:active {
+			transform: scale(0.95);
+		}
+
 	}
 }

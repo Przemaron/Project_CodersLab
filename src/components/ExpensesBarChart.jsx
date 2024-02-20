@@ -18,7 +18,22 @@ const ExpensesBarChart = () => {
 	// Funkcja do generowania kolorów dla wydatków
 	const generateExpenseColor = index => {
 		const hue = index * 137; // Złota proporcja dla różnorodności kolorów
-		return `hsla(${hue % 360}, 70%, 70%, 0.5)`;
+		return `hsla(${hue % 360}, 70%, 50%, 0.5)`;
+	};
+
+	// Funkcja do rozjaśniania kolorów HSLA
+	const adjustAlphaHSLA = (hsla, alphaMultiplier) => {
+		const parts = hsla.match(/hsla\((\d+), (\d+)%, (\d+)%, (\d+(\.\d+)?)\)/);
+		if (!parts) return hsla; // Zwraca oryginalny kolor, jeśli nie pasuje do wzorca
+
+		const hue = parseInt(parts[1], 10);
+		const saturation = parseInt(parts[2], 10);
+		const lightness = parseInt(parts[3], 10);
+		let alpha = parseFloat(parts[4]);
+
+		alpha = Math.min(alpha + alphaMultiplier, 1); // Nie przekraczaj 100%
+
+		return `hsla(${hue}, ${saturation}%, ${lightness}%, ${alpha})`;
 	};
 
 	useEffect(() => {
@@ -53,26 +68,18 @@ const ExpensesBarChart = () => {
 			const categories = Object.keys(expensesByCategory);
 			const expensesSums = Object.values(expensesByCategory);
 			const expenseColors = categories.map((_, index) => generateExpenseColor(index));
+			const borderColor = expenseColors.map(color => adjustAlphaHSLA(color, 20));
 
 			// Ustawienie danych dla wykresu
 			setChartData({
-				labels: categories,
+				labels: ['Przychody', ...categories],
 				datasets: [
 					// Dataset dla przychodów
 					{
-						label: 'Przychody',
-						data: Array(categories.length).fill(totalIncome),
-						backgroundColor: incomeColor.backgroundColor,
-						borderColor: incomeColor.borderColor,
-						borderWidth: 1,
-					},
-					// Dataset dla wydatków
-					{
-						label: 'Wydatki',
-						data: expensesSums,
-						backgroundColor: expenseColors,
-						borderColor: expenseColors,
-						borderWidth: 1,
+						data: [totalIncome, ...expensesSums],
+						backgroundColor: [incomeColor.backgroundColor, ...expenseColors],
+						borderColor: [incomeColor.borderColor, ...borderColor],
+						borderWidth: 2,
 					},
 				],
 			});
@@ -85,13 +92,40 @@ const ExpensesBarChart = () => {
 	const options = {
 		scales: {
 			y: {
+				display: true,
+				title: {
+					display: true,
+					text: 'Kwota (PLN)',
+					font: {
+						size: 18,
+						family: 'Poppins, sans-serif',
+					},
+					color: '#888',
+				},
 				beginAtZero: true,
+				type: 'logarithmic',
+				min: 50,
+				ticks: {
+					stepSize: 50,
+				},
+			},
+
+			x: {
+				display: true,
+				title: {
+					display: true,
+					text: 'Kategoria',
+					font: {
+						size: 18,
+						family: 'Poppins, sans-serif',
+					},
+					color: '#888',
+				},
 			},
 		},
 		plugins: {
 			legend: {
-				display: true,
-				position: 'top',
+				display: false,
 			},
 			title: {
 				display: true,
@@ -100,14 +134,46 @@ const ExpensesBarChart = () => {
 					size: 34,
 					family: 'Poppins, sans-serif',
 				},
-				color: '#333',
+				color: '#888',
+				padding: {
+					bottom: 30,
+				},
+			},
+			tooltip: {
+				enabled: true,
+				padding: 10,
+				backgroundColor: 'rgba(0, 0, 0, 0.7)',
+				titleColor: 'rgba(255, 255, 255, 1)',
+				bodyColor: 'rgba(255, 255, 255, 1)',
+				titleFont: {
+					size: 16,
+					family: 'Poppins, sans-serif',
+				},
+				bodyFont: {
+					size: 14,
+					family: 'Poppins, sans-serif',
+				},
+				callbacks: {
+					label: category => {
+						const label = category.dataset.label || '';
+						const value = category.parsed.y || 0;
+						return `${label}: ${value.toFixed(2)} PLN`;
+					},
+				},
 			},
 		},
 		layout: {
-			padding: {               
-                top: 30,
-                left: 30               
-            },
+			labels: {
+				font: {
+					size: 16,
+					family: 'Poppins, sans-serif',
+				},
+				color: '#888',
+			},
+			padding: {
+				top: 30,
+				left: 30,
+			},
 		},
 	};
 

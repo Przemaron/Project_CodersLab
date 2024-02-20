@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import IncomeForm from './IncomeForm';
 import ExpensesWidget from './ExpensesWidget';
-import RemainingWidget from './RemainingWidget';
+// import RemainingWidget from './RemainingWidget';
 import SavingsWidget from './SavingsWidget';
 import { supabase } from '../API/supabaseClient';
+import DashboardPieChart from './DashboardPieChart';
 import '../assets/styles/Dashboard.scss';
 
-const Dashboard = ({ expenses, setExpenses, incomes, setIncomes }) => {
+const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 	const [savings, setSavings] = useState(0);
 
 	const fetchExpensesIncomesAndSavings = async () => {
@@ -47,10 +48,12 @@ const Dashboard = ({ expenses, setExpenses, incomes, setIncomes }) => {
 	};
 
 	return (
-		<div className='dashboard' style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+		<div className='dashboard' style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)'}}>
 			<IncomeForm addSavings={addSavings} />
 			<ExpensesWidget expenses={expenses} />
-			<RemainingWidget expenses={expenses} incomes={incomes} />
+			<div style={{ width: '100%', height: '450px', display: 'flex', justifyContent: 'center'}}>
+					<DashboardPieChart />
+				</div>
 			<SavingsWidget savings={savings} />
 		</div>
 	);

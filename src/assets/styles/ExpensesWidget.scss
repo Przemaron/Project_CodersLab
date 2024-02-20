@@ -5,7 +5,7 @@
     align-items: center;    
     background-color: #1a1a1a; // Zmiana na jasne tło dla spójności
     width: 90%;
-    height: 72%;
+    height: 75%;
     margin: auto; // Wyśrodkowanie widgetu
     padding: 2rem; // Dostosowanie paddingu
     border-radius: 3rem; // Miękkie zaokrąglenie
@@ -15,7 +15,7 @@
         text-align: center;
         margin: 0 auto; // Zmniejszenie marginesu dla lepszego wykorzystania przestrzeni
         font-size: 2rem; // Zmniejszenie rozmiaru fontu dla lepszej spójności
-        color: #333; // Ciemniejszy kolor tekstu dla lepszej czytelności
+        color: #888; // Ciemniejszy kolor tekstu dla lepszej czytelności
     }
 
     p {
@@ -25,15 +25,13 @@
 
     h3 {
         text-align: center;
-        margin: 0 auto; // Zmniejszenie marginesu dla lepszego wykorzystania przestrzeni
+        margin: 0 auto .5rem; // Zmniejszenie marginesu dla lepszego wykorzystania przestrzeni
         font-size: 1.5rem; // Zmniejszenie rozmiaru fontu dla lepszej spójności
-        color: #333;
+        color: #888;
     }
 
     ul {
         list-style: none; // Usunięcie domyślnej listy
         font-size: 1.2rem;               
     }
-
-
 }

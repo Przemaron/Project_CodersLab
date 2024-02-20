@@ -31,7 +31,7 @@ input[type='number']::-ms-reveal {
 	margin: 20px auto;
 
 	h2 {
-		color: #333;
+		color: #888;
 		margin: 1rem 0;
 		font-size: 2rem;
 	}
@@ -70,6 +70,7 @@ input[type='number']::-ms-reveal {
 			justify-content: center;
 			align-items: center;
 			gap: 4rem;
+			margin-bottom: 4rem;
 
 			.checkboxControl {
 				display: flex;
@@ -104,6 +105,10 @@ input[type='number']::-ms-reveal {
 					background-color: white;
 					color: black;
 					box-shadow: 0px 0px 5px white;
+					
+					&:active {
+						transform: scale(0.95);
+					}
 				}
 			}
 		}
@@ -160,6 +165,10 @@ input[type='number']::-ms-reveal {
 						color: black;
 						background-color: white;
 						box-shadow: 0px 0px 5px white;
+						
+						&:active {
+							transform: scale(0.95);
+						}
 					}
 				}
 			}
