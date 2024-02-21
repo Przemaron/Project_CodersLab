@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../API/supabaseClient';
 import '../assets/styles/Budget.scss';
-import ExpensesBarChart from '../components/ExpensesBarChart';
+import ExpensesBarChart from './ExpensesBarChart';
 
 const categories = [
 	'dom',
@@ -166,6 +166,25 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 		return expense.isRecurring && expenseMonth === selectedMonth && expenseYear === selectedYear;
 	});
 
+	// Zamiana liczby miesiaća na nazwę
+	const monthNames = [
+		'Styczeń',
+		'Luty',
+		'Marzec',
+		'Kwiecień',
+		'Maj',
+		'Czerwiec',
+		'Lipiec',
+		'Sierpień',
+		'Wrzesień',
+		'Październik',
+		'Listopad',
+		'Grudzień',
+	];
+	const monthName = monthNames[selectedMonth - 1];
+
+
+
 	return (
 		<div className='budget'>
 			<div style={{ width: '100%', display: 'flex' }}>
@@ -274,7 +293,7 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 			<div style={{ width: '100%', display: 'flex' }}>
 				<div className='tableCycle-container' style={{ width: '40%', marginRight: '2rem'}}>
 					<h2>
-						Planowane wydatki ({selectedMonth}/{selectedYear})
+						Planowane wydatki ({monthName.slice(0, 3)} / {selectedYear})
 					</h2>
 					<div className='tableCycle-control'>
 						<label>

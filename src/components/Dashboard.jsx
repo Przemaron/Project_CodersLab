@@ -48,12 +48,12 @@ const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 	};
 
 	return (
-		<div className='dashboard' style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)'}}>
+		<div className='dashboard' style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
 			<IncomeForm addSavings={addSavings} />
 			<ExpensesWidget expenses={expenses} />
-			<div style={{ width: '100%', height: '450px', display: 'flex', justifyContent: 'center'}}>
-					<DashboardPieChart />
-				</div>
+			<div style={{ width: '100%', height: '450px', display: 'flex', justifyContent: 'center' }}>
+				<DashboardPieChart />
+			</div>
 			<SavingsWidget savings={savings} />
 		</div>
 	);

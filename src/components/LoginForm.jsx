@@ -3,73 +3,93 @@ import '../assets/styles/LoginForm.scss';
 import { useAuth } from '../components/AuthProvider';
 
 const LoginForm = () => {
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [error, setError] = useState('');
-	const { login } = useAuth();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [error, setError] = useState('');
+    const [isRegistering, setIsRegistering] = useState(false); // Nowy stan do przełączania między logowaniem a rejestracją
+    const { login, signUp } = useAuth(); // Zakładamy, że useAuth dostarcza też funkcję register
 
-	
-	const handleSubmit = async event => {
-		event.preventDefault();
-		setError(''); // Czyszczenie błędów przed nową próbą logowania
+    const handleSubmit = async event => {
+        event.preventDefault();
+        setError(''); // Czyszczenie błędów przed nową próbą
 
-		if (!email || !password) {
-			setError('Pola nie mogą być puste');
-			return;
-		}
+        if (!email || !password || (isRegistering && !name)) {
+            setError('Wszystkie pola muszą być wypełnione');
+            return;
+        }
 
-		// Walidacja, czy email zawiera znak '@'
-		if (!email.includes('@')) {
-			setError('Email musi zawierać znak "@"');
-			return;
-		}
-	
-		// Walidacja, czy hasło ma minimum 6 znaków
-		if (password.length < 6) {
-			setError('Hasło musi mieć minimum 6 znaków');
-			return;
-		}
+        if (!email.includes('@')) {
+            setError('Email musi zawierać znak "@"');
+            return;
+        }
 
-		try {
-			await login(email, password)
-		} catch (error) {
-			setError(error.message);
-		}
-	};
+        if (password.length < 6) {
+            setError('Hasło musi mieć minimum 6 znaków');
+            return;
+        }
 
-	return (
-		<>
-			<div className='login-form-container'>
-			<div className='formCircleUp'></div>
-				<form className='login-form' onSubmit={handleSubmit}>
-        <h2>Login</h2>
-					<div>
-						<label htmlFor='username'>Email:</label>
-						<input
-							id='username'
-							type='text'
-							value={email}
-							onChange={e => setEmail(e.target.value)}
-							placeholder='Podaj email'
-						/>
-					</div>
-					<div>
-						<label htmlFor='password'>Hasło:</label>
-						<input
-							id='password'
-							type='password'
-							value={password}
-							onChange={e => setPassword(e.target.value)}
-							placeholder='Podaj hasło'
-						/>
-					</div>
-					{error && <div>{error}</div>}
-					<button type='submit'><i class="fa-solid fa-right-to-bracket"></i>Zaloguj</button>
-				</form>
-			<div className='formCircleDown'></div>
-			</div>
-		</>
-	);
+        try {
+            if (isRegistering) {
+                // Proces rejestracji
+                await signUp(name, email, password);
+            } else {
+                // Proces logowania
+                await login(email, password);
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
+    return (
+        <>
+            <div className='login-form-container'>
+                <div className='formCircleUp'></div>
+                <form className='login-form' onSubmit={handleSubmit}>
+                    <h2>{isRegistering ? 'Rejestracja' : 'Login'}</h2>
+                    {isRegistering && (
+                        <div>
+                            <label htmlFor='name'>Imię:</label>
+                            <input
+                                id='name'
+                                type='text'
+                                value={name}
+                                onChange={e => setName(e.target.value)}
+                                placeholder='Podaj imię'
+                            />
+                        </div>
+                    )}
+                    <div>
+                        <label htmlFor='email'>Email:</label>
+                        <input
+                            id='email'
+                            type='text'
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            placeholder='Podaj email'
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor='password'>Hasło:</label>
+                        <input
+                            id='password'
+                            type='password'
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            placeholder='Podaj hasło'
+                        />
+                    </div>
+                    {error && <div className="error">{error}</div>}
+                    <button type='submit'>{isRegistering ? 'Zarejestruj' : 'Zaloguj'}</button>
+                    <button type='button' onClick={() => setIsRegistering(!isRegistering)}>
+                        {isRegistering ? 'Masz już konto? Zaloguj się' : 'Nie masz konta? Zarejestruj się'}
+                    </button>
+                </form>
+                <div className='formCircleDown'></div>
+            </div>
+        </>
+    );
 };
 
 export default LoginForm;

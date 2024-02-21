@@ -129,7 +129,7 @@ const ExpensesBarChart = () => {
 			},
 			title: {
 				display: true,
-				text: 'Przychody i wydatki według kategorii',
+				text: (`Przychody i wydatki według kategorii`),
 				font: {
 					size: 34,
 					family: 'Poppins, sans-serif',
