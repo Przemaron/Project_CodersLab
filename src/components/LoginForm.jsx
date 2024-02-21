@@ -10,6 +10,16 @@ const LoginForm = () => {
     const [isRegistering, setIsRegistering] = useState(false); // Nowy stan do przełączania między logowaniem a rejestracją
     const { login, signUp } = useAuth(); // Zakładamy, że useAuth dostarcza też funkcję register
     
+    const getPolishErrorMessage = (error) => {
+        const messageMap = {
+          'Invalid login credentials': 'Błędny adres e-mail lub hasło.',
+          'User already registered': 'Użytkownik już istnieje.',
+        };
+      
+        // Fallback to a generic error message if the specific error is not mapped
+        return messageMap[error.message] || 'Wystąpił nieoczekiwany błąd';
+      };
+
     const handleSubmit = async event => {
         event.preventDefault();
         setError(''); // Czyszczenie błędów przed nową próbą
@@ -38,7 +48,7 @@ const LoginForm = () => {
                 await login(email, password);
             }
         } catch (error) {
-            setError(error.message);
+            setError(getPolishErrorMessage(error));
         }
     };
 
