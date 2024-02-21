@@ -13,7 +13,7 @@ const DashboardPieChart = () => {
             borderWidth: 3,
         }],
     });
-
+    // Pobierz wydatki i przychody z Supabase
     useEffect(() => {
         const fetchData = async () => {
             const currentYear = new Date().getFullYear();

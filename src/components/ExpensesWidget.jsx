@@ -17,7 +17,7 @@ const ExpenseWidget = ({ expenses }) => {
     return expenses.reduce((sum, expense) => sum + expense.amount, 0);
   };
 
-  // Funkcja do pobrania trzech ostatnich wydatków
+  // Funkcja do pobrania pięciu ostatnich wydatków
   const getLastExpenses = (expenses) => {
     return expenses.slice(-5).reverse();
   };

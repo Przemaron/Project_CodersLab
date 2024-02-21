@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		const session = supabase.auth.getSession();
 		setUser(session?.user || null);
-
+		//
 		const { data: authListener } = supabase.auth.onAuthStateChange(async (_event, session) => {
 			const currentUser = session?.user;
 			setUser(currentUser || null);
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
 			authListener?.unsubscribe();
 		};
 	}, []);
-
+	// Rejestracja użytkownika
 	const signUp = async (name, email, password) => {
 		localStorage.setItem('newUserName', name);
 		// Rejestracja użytkownika
@@ -55,21 +55,21 @@ export const AuthProvider = ({ children }) => {
 		if (user) {
 			// Zapisywanie dodatkowych informacji o użytkowniku w tabeli `profiles`
 			const { error: profileError } = await supabase.from('profiles').insert([{ user_id: user.id, name: name }]);
-
+			
 			if (profileError) {
 				console.error(profileError);
 				throw profileError;
 			}
 		}
 	};
-
+	// Logowanie użytkownika
 	const login = async (email, password) => {
 		const { error } = await supabase.auth.signInWithPassword({ email, password });
 		if (error) {
 			throw error;
 		}
 	};
-
+	// Wylogowanie użytkownika
 	const logout = async () => {
 		const { error } = await supabase.auth.signOut();
 		if (error) {
@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	const value = { user, login, logout, signUp };
-
+	
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

@@ -9,10 +9,10 @@ import '../assets/styles/Dashboard.scss';
 
 const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 	const [savings, setSavings] = useState(0);
-
+	// Pobierz wydatki, przychody i oszczędności z Supabase
 	const fetchExpensesIncomesAndSavings = async () => {
 		const { data: expensesData, error: expensesError } = await supabase
-			.from('expensesTable') // Nazwa tabeli w Supabase
+			.from('expensesTable')
 			.select('*');
 
 		if (expensesError) {
@@ -23,7 +23,7 @@ const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 
 		// Pobieranie przychodów
 		const { data: incomesData, error: incomesError } = await supabase
-			.from('incomeTable') // Upewnij się, że nazwa tabeli jest poprawna
+			.from('incomeTable')
 			.select('*');
 
 		if (incomesError) {
@@ -42,6 +42,7 @@ const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 		fetchExpensesIncomesAndSavings();
 	}, []);
 
+	// Funkcja dodająca oszczędności
 	const addSavings = (income, rate) => {
 		const newSavings = income * (rate / 100);
 		setSavings(prevSavings => prevSavings + newSavings);

@@ -43,7 +43,7 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 		fetchData();
 	}, [setExpenses, setIncomes]);
 
-	// Sprawdzanie czy data wydatku jest z przyszłości (poza bieżącym miesiącem)
+	// Sprawdzanie czy data wydatku jest z przyszłości (poza bieżącym miesiącem) jeśli tak, to ustaw `isRecurring` na `true`
 	useEffect(() => {
 		if (
 			(selectedDate.getMonth() > currentDate.getMonth() && selectedDate.getFullYear() === currentDate.getFullYear()) ||
@@ -58,7 +58,6 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 		e.preventDefault();
 		const newName = capitalizeFirstLetter(name);
 		
-
 		// Sprawdzenie, czy wszystkie pola zostały wypełnione
 		if (!name.trim() || !category.trim() || !amount.trim()) {
 			alert('Wszystkie pola są wymagane.');
@@ -144,14 +143,14 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 			});
 		});
 	};
-
+	
+	// Wskaźnik kierunku sortowania
 	const getSortDirectionIndicator = key => {
 		if (sortConfig.key !== key) {
 			return;
 		}
 		return sortConfig.direction === 'ascending' ? '↓' : '↑';
 	};
-	// Wskaźnik kierunku sortowania
 
 	// Zmiana pierwszej litery na wielką
 	const capitalizeFirstLetter = string => {
@@ -166,7 +165,7 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 		return expense.isRecurring && expenseMonth === selectedMonth && expenseYear === selectedYear;
 	});
 
-	// Zamiana liczby miesiaća na nazwę
+	// Zamiana liczby miesiąca na nazwę
 	const monthNames = [
 		'Styczeń',
 		'Luty',
@@ -182,8 +181,6 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 		'Grudzień',
 	];
 	const monthName = monthNames[selectedMonth - 1];
-
-
 
 	return (
 		<div className='budget'>

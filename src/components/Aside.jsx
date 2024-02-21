@@ -8,7 +8,7 @@ import { supabase } from '../API/supabaseClient';
 const Aside = () => {
 	const { user, logout } = useAuth(); // Użyj hooka useAuth do dostępu do funkcji logout
 	const [name, setName] = useState('');
-
+	// Użyj hooka useEffect do pobrania profilu użytkownika po zalogowaniu
 	useEffect(() => {
 		const fetchProfile = async () => {
 			console.log('Fetching profile for user ID:', user.id);
@@ -26,7 +26,7 @@ const Aside = () => {
 
 		fetchProfile();
 	}, [user]);
-
+	// Utwórz funkcję handleLogout, która wywoła funkcję logout
 	const handleLogout = async () => {
 		try {
 			await logout(); // Wywołaj funkcję logout
@@ -34,13 +34,13 @@ const Aside = () => {
 			console.error('Problem z wylogowaniem:', error);
 		}
 	};
-
+	// Wyrenderuj komponent Aside
 	return (
 		<aside className='aside'>
 			<DateTimeDisplay />
 			{name && (
 				<p className='loginName'>
-					<i className='fa-solid fa-user'></i> {name}
+					<i className='fa-solid fa-user'></i> {name.toUpperCase()}
 				</p>
 			)}
 			<nav>

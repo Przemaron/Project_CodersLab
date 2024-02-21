@@ -8,6 +8,7 @@
 	align-items: center;
 	width: 300px;
 	height: 100vh;
+	box-shadow: 5px 10px 15px 1px #000000;
 	
 	.fa-solid{
 		margin-right: 1rem;
@@ -18,6 +19,11 @@
 		font-size: 1.5rem;
 		font-weight: bold;
 		margin-bottom: 2rem;
+
+		.fa-solid{
+			color: #007bff;
+			font-size: 2rem;
+		}
 	
 	}
 

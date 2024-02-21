@@ -7,26 +7,26 @@ const IncomeForm = ({ addSavings }) => {
 	const [savingsRate, setSavingsRate] = useState('');
 	const [monthlyIncomeTotal, setMonthlyIncomeTotal] = useState(0);
 
-  const fetchMonthlyIncomeTotal = async () => {
-    const today = new Date();
-    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
+	// Funkcja do pobierania sumy przychodów w bieżącym miesiącu
+	const fetchMonthlyIncomeTotal = async () => {
+		const today = new Date();
+		const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+		const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
 
-    const { data, error } = await supabase
-      .from('incomeTable')
-      .select('amount')
-      .gte('date', firstDayOfMonth)
-      .lte('date', lastDayOfMonth);
+		const { data, error } = await supabase
+			.from('incomeTable')
+			.select('amount')
+			.gte('date', firstDayOfMonth)
+			.lte('date', lastDayOfMonth);
 
-    if (error) {
-      console.error('Błąd przy pobieraniu sumy przychodów:', error);
-    } else {
-      const total = data.reduce((acc, { amount }) => acc + parseFloat(amount), 0);
-      setMonthlyIncomeTotal(total);
-    }
-  };
+		if (error) {
+			console.error('Błąd przy pobieraniu sumy przychodów:', error);
+		} else {
+			const total = data.reduce((acc, { amount }) => acc + parseFloat(amount), 0);
+			setMonthlyIncomeTotal(total);
+		}
+	};
 	useEffect(() => {
-		// Funkcja do pobierania sumy przychodów w bieżącym miesiącu
 		fetchMonthlyIncomeTotal();
 	}, []);
 
@@ -50,7 +50,7 @@ const IncomeForm = ({ addSavings }) => {
 				addSavings(parseFloat(income), parseFloat(savingsRate));
 			}
 			// Odśwież sumę przychodów po dodaniu nowego przychodu
-      fetchMonthlyIncomeTotal();
+			fetchMonthlyIncomeTotal();
 		}
 
 		setIncome('');

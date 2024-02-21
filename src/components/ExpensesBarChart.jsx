@@ -64,7 +64,7 @@ const ExpensesBarChart = () => {
 				acc[category] = (acc[category] || 0) + amount;
 				return acc;
 			}, {});
-
+			
 			const categories = Object.keys(expensesByCategory);
 			const expensesSums = Object.values(expensesByCategory);
 			const expenseColors = categories.map((_, index) => generateExpenseColor(index));

@@ -9,7 +9,7 @@ const LoginForm = () => {
     const [error, setError] = useState('');
     const [isRegistering, setIsRegistering] = useState(false); // Nowy stan do przełączania między logowaniem a rejestracją
     const { login, signUp } = useAuth(); // Zakładamy, że useAuth dostarcza też funkcję register
-
+    
     const handleSubmit = async event => {
         event.preventDefault();
         setError(''); // Czyszczenie błędów przed nową próbą

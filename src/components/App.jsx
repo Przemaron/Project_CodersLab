@@ -12,7 +12,7 @@ const App = () => {
 	const { user } = useAuth();
 	const [expenses, setExpenses] = useState([]);
 	const [incomes, setIncomes] = useState([]);
-
+		
 	return (
 		<div className='app'>
 			{!user ? (
