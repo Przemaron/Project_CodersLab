@@ -27,7 +27,7 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 	const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 	const currentDate = new Date();
 	const selectedDate = new Date(date);
-	
+
 	// Pobieranie danych z Supabase
 	useEffect(() => {
 		const fetchData = async () => {
@@ -50,14 +50,14 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 			selectedDate.getFullYear() > currentDate.getFullYear()
 		) {
 			setIsRecurring(true);
-		} 
+		}
 	}, [selectedDate, currentDate]); // Zależności: aktualizuj, gdy `selectedDate` lub `currentDate` się zmieniają
 
 	// Wysyłanie danych do Supabase
 	const handleSubmit = async e => {
 		e.preventDefault();
 		const newName = capitalizeFirstLetter(name);
-		
+
 		// Sprawdzenie, czy wszystkie pola zostały wypełnione
 		if (!name.trim() || !category.trim() || !amount.trim()) {
 			alert('Wszystkie pola są wymagane.');
@@ -143,7 +143,7 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 			});
 		});
 	};
-	
+
 	// Wskaźnik kierunku sortowania
 	const getSortDirectionIndicator = key => {
 		if (sortConfig.key !== key) {
@@ -184,10 +184,11 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 
 	return (
 		<div className='budget'>
-			<div style={{ width: '100%', display: 'flex' }}>
+			<div className='upperRow'>
+
 				{/*Formularz dodawania wydatku*/}
 
-				<div style={{ width: '50%' }}>
+				<div className='addExpenseForm'>
 					<h2>Dodaj wydatek</h2>
 					<form onSubmit={handleSubmit}>
 						<label>
@@ -232,7 +233,7 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 
 				{/*Tabela wydatków*/}
 
-				<div style={{ width: '60%' }} className='tableCurrent-container'>
+				<div className='tableCurrent-container'>
 					<h2>Wszystkie wydatki</h2>
 					<div className='tableCurrent'>
 						{expenses.length > 0 ? (
@@ -287,8 +288,8 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 
 			{/*Tabela zaplanowanych wydatków */}
 
-			<div style={{ width: '100%', display: 'flex' }}>
-				<div className='tableCycle-container' style={{ width: '40%', marginRight: '2rem'}}>
+			<div className='lowerRow'>
+				<div className='tableCycle-container'>
 					<h2>
 						Planowane wydatki ({monthName.slice(0, 3)} / {selectedYear})
 					</h2>
@@ -338,7 +339,7 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 
 				{/*Wykres kołowy wydatków*/}
 
-				<div style={{ width: '60%', height: '500px', display: 'flex', justifyContent: 'center'}}>
+				<div style={{ width: '60%', height: '100%', display: 'flex', justifyContent: 'center' }}>
 					<ExpensesBarChart />
 				</div>
 			</div>

@@ -1,4 +1,5 @@
 .incomeForm {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -7,10 +8,21 @@
 	background-color: #1a1a1a; // Jasne tło dla kontrastu
 	border-radius: 3rem; // Zaokrąglone rogi
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Subtelny cień dla głębi
-	width: 90%; // Responsywność
-	height: auto;
+	width: 45%; // Responsywność
+	height: 80%;
 	margin: auto; // Wyśrodkowanie formularza
 	box-shadow: 5px 10px 15px 1px #000000;
+	&::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        box-shadow: -2px -3px 0px 0px rgba(197, 197, 197, 0.5);
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        border-radius: 3rem;
+    }
 
 	h2 {
 		color: #888; // Ciemniejszy tekst dla lepszej widoczności

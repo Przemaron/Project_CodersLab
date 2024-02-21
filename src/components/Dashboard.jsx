@@ -11,9 +11,7 @@ const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 	const [savings, setSavings] = useState(0);
 	// Pobierz wydatki, przychody i oszczędności z Supabase
 	const fetchExpensesIncomesAndSavings = async () => {
-		const { data: expensesData, error: expensesError } = await supabase
-			.from('expensesTable')
-			.select('*');
+		const { data: expensesData, error: expensesError } = await supabase.from('expensesTable').select('*');
 
 		if (expensesError) {
 			console.error('Błąd przy pobieraniu wydatków:', expensesError);
@@ -22,9 +20,7 @@ const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 		}
 
 		// Pobieranie przychodów
-		const { data: incomesData, error: incomesError } = await supabase
-			.from('incomeTable')
-			.select('*');
+		const { data: incomesData, error: incomesError } = await supabase.from('incomeTable').select('*');
 
 		if (incomesError) {
 			console.error('Błąd przy pobieraniu przychodów:', incomesError);
@@ -49,13 +45,17 @@ const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 	};
 
 	return (
-		<div className='dashboard' style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
-			<IncomeForm addSavings={addSavings} />
-			<ExpensesWidget expenses={expenses} />
-			<div style={{ width: '100%', height: '450px', display: 'flex', justifyContent: 'center' }}>
-				<DashboardPieChart />
+		<div className='dashboard'>
+			<div className='upperRow'>
+				<IncomeForm addSavings={addSavings} />
+				<ExpensesWidget expenses={expenses} />
 			</div>
-			<SavingsWidget savings={savings} />
+			<div className='lowerRow'>
+				<div style={{ width: '50%', height: '80%', display: 'flex', justifyContent: 'center' }}>
+					<DashboardPieChart />
+				</div>
+				<SavingsWidget savings={savings} />
+			</div>
 		</div>
 	);
 };

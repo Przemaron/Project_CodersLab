@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import './assets/styles/index.scss';
-import { AuthProvider} from '../src/components/AuthProvider';
+import { AuthProvider } from '../src/components/AuthProvider';
 
 //Tutaj będzie lOGIN
 //walidacja loginu
@@ -12,6 +12,6 @@ import { AuthProvider} from '../src/components/AuthProvider';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<AuthProvider>
-		<App />
+			<App />
 	</AuthProvider>
 );
