@@ -34,7 +34,6 @@ const App = () => {
 									<Budget expenses={expenses} setExpenses={setExpenses} incomes={incomes} setIncomes={setIncomes} />
 								}
 							/>
-							{/* Możesz dodać więcej ścieżek i komponentów tutaj */}
 						</Routes>
 					</MainSection>
 				</Router>

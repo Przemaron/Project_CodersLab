@@ -47,7 +47,7 @@ const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 	return (
 		<div className='dashboard'>
 			<div className='upperRow'>
-				<IncomeForm addSavings={addSavings} />
+				<IncomeForm addSavings={addSavings} /> 
 				<ExpensesWidget expenses={expenses} />
 			</div>
 			<div className='lowerRow'>
