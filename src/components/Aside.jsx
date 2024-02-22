@@ -4,11 +4,13 @@ import '../assets/styles/Aside.scss';
 import DateTimeDisplay from './DateAndTime';
 import { useAuth } from '../components/AuthProvider';
 import { supabase } from '../API/supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
 const Aside = () => {
 	const { user, logout } = useAuth(); // Użyj hooka useAuth do dostępu do funkcji logout
 	const [name, setName] = useState('');
 	// Użyj hooka useEffect do pobrania profilu użytkownika po zalogowaniu
+	const navigate = useNavigate();
 	useEffect(() => {
 		const fetchProfile = async () => {
 			console.log('Fetching profile for user ID:', user.id);
@@ -28,8 +30,10 @@ const Aside = () => {
 	}, [user]);
 	// Utwórz funkcję handleLogout, która wywoła funkcję logout
 	const handleLogout = async () => {
+		
 		try {
 			await logout(); // Wywołaj funkcję logout
+			navigate('/dashboard');
 		} catch (error) {
 			console.error('Problem z wylogowaniem:', error);
 		}
