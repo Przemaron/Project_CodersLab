@@ -54,8 +54,8 @@ const Aside = () => {
 				<Link to='/budget'>
 					<i className='fa-solid fa-wallet'></i>Budżet
 				</Link>
-				<Link to='/how-to'>
-					<i className='fa-solid fa-circle-info'></i>Jak to działa?
+				<Link to='/instruction'>
+					<i className='fa-solid fa-circle-info'></i>O aplikacji
 				</Link>
 			</nav>
 			<button className='logOutButton' onClick={handleLogout}>

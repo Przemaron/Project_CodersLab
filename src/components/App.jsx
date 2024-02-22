@@ -5,6 +5,7 @@ import MainSection from '../components/MainSection';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Budget from '../components/Budget';
+import Instruction from '../components/Instruction';
 import '../assets/styles/App.scss';
 import { useAuth } from '../components/AuthProvider';
 
@@ -40,7 +41,9 @@ const App = () => {
 										<Budget expenses={expenses} setExpenses={setExpenses} incomes={incomes} setIncomes={setIncomes} />
 									}
 								/>
-								{/* Możesz dodać więcej ścieżek i komponentów tutaj */}
+								<Route 
+								path='/instruction'
+								element={<Instruction/>}/>
 							</Routes>
 						</MainSection>
 					</>

@@ -183,7 +183,7 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 	const monthName = monthNames[selectedMonth - 1];
 
 	return (
-		<div className='budget'>
+		<div className='budgetSection'>
 			<div className='upperRow'>
 
 				{/*Formularz dodawania wydatku*/}

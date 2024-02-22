@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import IncomeForm from './IncomeForm';
 import ExpensesWidget from './ExpensesWidget';
-// import RemainingWidget from './RemainingWidget';
 import SavingsWidget from './SavingsWidget';
 import { supabase } from '../API/supabaseClient';
 import DashboardPieChart from './DashboardPieChart';
@@ -45,14 +44,16 @@ const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 	};
 
 	return (
-		<div className='dashboard'>
+		<div className='dashboardSection'>
 			<div className='upperRow'>
-				<IncomeForm addSavings={addSavings} /> 
+				<IncomeForm addSavings={addSavings} />
 				<ExpensesWidget expenses={expenses} />
 			</div>
 			<div className='lowerRow'>
-				<div style={{ width: '50%', height: '80%', display: 'flex', justifyContent: 'center' }}>
-					<DashboardPieChart />
+				<div className='chartPie'>
+					<div className='canvas'>
+						<DashboardPieChart />
+					</div>
 				</div>
 				<SavingsWidget savings={savings} />
 			</div>
