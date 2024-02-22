@@ -51,7 +51,7 @@ const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 			</div>
 			<div className='lowerRow'>
 				<div className='chartPie'>
-					<div className='canvas'>
+					<div>
 						<DashboardPieChart />
 					</div>
 				</div>

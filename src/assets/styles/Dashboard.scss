@@ -1,35 +1,39 @@
 .dashboardSection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    padding: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+	padding: 10px;
 
-    .chartPie {
-        display: flex;
-        justify-content: center;
-        width: 50%;
-        height: 45vh;
-        padding: 1rem;
-    }
+	.chartPie {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 50%;
+		div {
+            padding-top: 1rem;
+			width: 55%;
+			height: 500px;
+		}
+	}
 
-    .upperRow{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        height: 95%;
-        width: 95%;
-    }
+	.upperRow {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		height: 95%;
+		width: 95%;
+	}
 
-    .lowerRow{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        height: 95%;
-        width: 95%;
-    }
+	.lowerRow {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		height: 95%;
+		width: 95%;
+	}
 }

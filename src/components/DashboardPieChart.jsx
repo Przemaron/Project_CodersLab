@@ -101,7 +101,7 @@ const DashboardPieChart = () => {
 					family: 'Poppins, sans-serif',
 				},
 			},
-		},
+		},		
 	};
 
 	return <Pie data={chartData} options={options} />;
