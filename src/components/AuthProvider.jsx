@@ -39,8 +39,7 @@ export const AuthProvider = ({ children }) => {
 	}, []);
 	// Rejestracja użytkownika
 	const signUp = async (name, email, password) => {
-		localStorage.setItem('newUserName', name);
-		// Rejestracja użytkownika
+		// Próba rejestracji użytkownika
 		const { user, error: signUpError } = await supabase.auth.signUp({
 			email: email,
 			password: password,
@@ -48,18 +47,34 @@ export const AuthProvider = ({ children }) => {
 
 		if (signUpError) {
 			console.error(signUpError);
-			throw signUpError;
-		}
-
-		// Sprawdzanie, czy użytkownik został pomyślnie utworzony
-		if (user) {
-			// Zapisywanie dodatkowych informacji o użytkowniku w tabeli `profiles`
-			const { error: profileError } = await supabase.from('profiles').insert([{ user_id: user.id, name: name }]);
-			
-			if (profileError) {
-				console.error(profileError);
-				throw profileError;
+			// Sprawdzenie, czy błąd wynika z istnienia już użytkownika
+			if (signUpError.message.includes('already exists')) {
+				console.log('Użytkownik już istnieje. Próba logowania...');
+				// Jeśli użytkownik już istnieje, próbujemy zalogować bez dodawania do tabeli profiles
+				const { error: loginError } = await supabase.auth.signIn({
+					email: email,
+					password: password,
+				});
+				if (loginError) {
+					console.error('Błąd logowania:', loginError);
+					throw loginError;
+				}
+			} else {
+				throw signUpError;
 			}
+		} else if (user) {
+			console.log('Użytkownik zarejestrowany. Dodawanie do profiles...');
+			// Użytkownik zarejestrowany pomyślnie, dodajemy do tabeli profiles
+			await addUserProfile(user.id, name);
+		}
+	};
+
+	// Dodawanie dodatkowych informacji o użytkowniku
+	const addUserProfile = async (userId, name) => {
+		const { error: profileError } = await supabase.from('profiles').insert([{ user_id: userId, name: name }]);
+		if (profileError) {
+			console.error('Błąd przy dodawaniu do profiles:', profileError);
+			throw profileError;
 		}
 	};
 	// Logowanie użytkownika
@@ -78,7 +93,7 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	const value = { user, login, logout, signUp };
-	
+
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
