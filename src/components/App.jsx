@@ -12,33 +12,41 @@ const App = () => {
 	const { user } = useAuth();
 	const [expenses, setExpenses] = useState([]);
 	const [incomes, setIncomes] = useState([]);
-		
+
 	return (
-		<div className='app'>
-			{!user ? (
-				<LoginForm />
-			) : (
-				<Router>
-					<Aside />
-					<MainSection>
-						<Routes>
-							<Route
-								path='/dashboard'
-								element={
-									<Dashboard expenses={expenses} setExpenses={setExpenses} incomes={incomes} setIncomes={setIncomes} />
-								}
-							/>
-							<Route
-								path='/budget'
-								element={
-									<Budget expenses={expenses} setExpenses={setExpenses} incomes={incomes} setIncomes={setIncomes} />
-								}
-							/>
-						</Routes>
-					</MainSection>
-				</Router>
-			)}
-		</div>
+		<Router>
+			<div className='app'>
+				{!user ? (
+					<LoginForm />
+				) : (
+					<>
+						<Aside />
+						<MainSection>
+							<Routes>
+								<Route
+									path='/dashboard'
+									element={
+										<Dashboard
+											expenses={expenses}
+											setExpenses={setExpenses}
+											incomes={incomes}
+											setIncomes={setIncomes}
+										/>
+									}
+								/>
+								<Route
+									path='/budget'
+									element={
+										<Budget expenses={expenses} setExpenses={setExpenses} incomes={incomes} setIncomes={setIncomes} />
+									}
+								/>
+								{/* Możesz dodać więcej ścieżek i komponentów tutaj */}
+							</Routes>
+						</MainSection>
+					</>
+				)}
+			</div>
+		</Router>
 	);
 };
 

@@ -29,10 +29,11 @@ const IncomeForm = ({ addSavings }) => {
 	useEffect(() => {
 		fetchMonthlyIncomeTotal();
 	}, []);
-
+	
 	const handleSubmit = async e => {
 		e.preventDefault();
-
+		
+		// Zapisz przychód w bazie danych
 		const formattedDate = new Date().toISOString().split('T')[0];
 
 		const { data, error } = await supabase
@@ -52,14 +53,14 @@ const IncomeForm = ({ addSavings }) => {
 			// Odśwież sumę przychodów po dodaniu nowego przychodu
 			fetchMonthlyIncomeTotal();
 		}
-
+		
 		setIncome('');
 		setSavingsRate('');
 	};
 
 	return (
 		<form className='incomeForm' onSubmit={handleSubmit}>
-			<h2>Przychody w danym miesiącu: </h2>
+			<h2>Przychody w bieżącym miesiącu: </h2>
 			<p>{monthlyIncomeTotal.toFixed(2)} zł</p>
 			<input
 				type='number'
