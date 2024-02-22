@@ -29,17 +29,29 @@ const IncomeForm = ({ addSavings }) => {
 	useEffect(() => {
 		fetchMonthlyIncomeTotal();
 	}, []);
-	
+
 	const handleSubmit = async e => {
 		e.preventDefault();
-		
+
 		// Zapisz przychód w bazie danych
 		const formattedDate = new Date().toISOString().split('T')[0];
+
+		const numericIncome = parseFloat(income);
+		const numericSavingsRate = parseFloat(savingsRate) / 100; // Konwersja procentu na ułamek
+		const savings = numericIncome * numericSavingsRate;
+		const remainingIncome = (numericIncome - savings);
+		console.log(remainingIncome);
 
 		const { data, error } = await supabase
 			.from('incomeTable')
 			.insert([
-				{ amount: income, savingsRate: savingsRate, date: formattedDate, savings: income * (savingsRate / 100) },
+				{
+					amount: numericIncome,
+					savingsRate: savingsRate,
+					date: formattedDate,
+					savings: savings,
+					remaining: remainingIncome,
+				},
 			]);
 
 		if (error) {
@@ -53,7 +65,7 @@ const IncomeForm = ({ addSavings }) => {
 			// Odśwież sumę przychodów po dodaniu nowego przychodu
 			fetchMonthlyIncomeTotal();
 		}
-		
+
 		setIncome('');
 		setSavingsRate('');
 	};

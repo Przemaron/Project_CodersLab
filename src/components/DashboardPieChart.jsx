@@ -29,12 +29,12 @@ const DashboardPieChart = () => {
             // Pobieranie przychodów
             const { data: incomesData } = await supabase
                 .from('incomeTable')
-                .select('*')
+                .select('remaining')
                 .gte('date', new Date(currentYear, currentMonth, 1).toISOString())
                 .lte('date', new Date(currentYear, currentMonth + 1, 0).toISOString());
 
             // Obliczanie łącznej sumy przychodów
-            const totalIncome = incomesData.reduce((acc, curr) => acc + curr.amount, 0);
+            const totalIncome = incomesData.reduce((acc, curr) => acc + curr.remaining, 0);
 
             // Obliczanie łącznej sumy wydatków
             const totalExpenses = expensesData.reduce((acc, curr) => acc + curr.amount, 0);
