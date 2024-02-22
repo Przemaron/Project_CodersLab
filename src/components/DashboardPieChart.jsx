@@ -62,10 +62,6 @@ const DashboardPieChart = () => {
 
 	// Opcje wykresu
 	const options = {
-		responsive: true,
-		maintainAspectRatio: false,
-		apsectRatio: 1,
-		
 		plugins: {
 			legend: {
 				display: true,
