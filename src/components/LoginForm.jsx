@@ -43,6 +43,7 @@ const LoginForm = () => {
 
 		try {
 			if (isRegistering) {
+				localStorage.setItem('newUserName', name);
 				// Proces rejestracji
 				await signUp(name, email, password);
 			} else {
