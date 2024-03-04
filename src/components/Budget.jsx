@@ -31,12 +31,20 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 	// Pobieranie danych z Supabase
 	useEffect(() => {
 		const fetchData = async () => {
-			const { data, error } = await supabase.from('expensesTable').select();
-			console.log(data);
-			if (error) {
-				console.error('Błąd przy pobieraniu danych', error);
-			} else {
-				setExpenses(data || []);
+			const {
+				data: { user },
+			} = await supabase.auth.getUser();
+
+			if (user) {
+				const userId = user.id;
+
+				const { data, error } = await supabase.from('expensesTable').select('*').eq('user_id', userId);
+
+				if (error) {
+					console.error('Błąd przy pobieraniu danych', error);
+				} else {
+					setExpenses(data || []);
+				}
 			}
 		};
 
@@ -56,6 +64,18 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 	// Wysyłanie danych do Supabase
 	const handleSubmit = async e => {
 		e.preventDefault();
+
+		const {
+			data: { user },
+		} = await supabase.auth.getUser();
+
+		if (!user) {
+			console.error('Brak zalogowanego użytkownika');
+			return;
+		}
+
+		const userId = user.id;
+
 		const newName = capitalizeFirstLetter(name);
 
 		// Sprawdzenie, czy wszystkie pola zostały wypełnione
@@ -81,7 +101,7 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 		}
 
 		// Dodawanie nowego wydatku
-		const newExpense = { date, name: newName, category, amount: parseFloat(amount), isRecurring };
+		const newExpense = { date, name: newName, category, amount: parseFloat(amount), isRecurring, user_id: userId};
 		const { data, error } = await supabase.from('expensesTable').insert([newExpense]).select();
 
 		if (error) {
@@ -185,7 +205,6 @@ const Budget = ({ expenses, setExpenses, setIncomes }) => {
 	return (
 		<div className='budgetSection'>
 			<div className='upperRow'>
-
 				{/*Formularz dodawania wydatku*/}
 
 				<div className='addExpenseForm'>

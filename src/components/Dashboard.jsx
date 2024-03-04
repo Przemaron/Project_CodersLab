@@ -10,7 +10,18 @@ const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 	const [savings, setSavings] = useState(0);
 	// Pobierz wydatki, przychody i oszczędności z Supabase
 	const fetchExpensesIncomesAndSavings = async () => {
-		const { data: expensesData, error: expensesError } = await supabase.from('expensesTable').select('*');
+		const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            console.error('Brak zalogowanego użytkownika');
+            return;
+        }
+        const userId = user.id;
+
+		const { data: expensesData, error: expensesError } = await supabase
+		.from('expensesTable')
+		.select('*')
+		.eq('user_id', userId);
 
 		if (expensesError) {
 			console.error('Błąd przy pobieraniu wydatków:', expensesError);
@@ -19,17 +30,18 @@ const Dashboard = ({ expenses, setExpenses, setIncomes }) => {
 		}
 
 		// Pobieranie przychodów
-		const { data: incomesData, error: incomesError } = await supabase.from('incomeTable').select('*');
+		const { data: incomesData, error: incomesError } = await supabase.from('incomeTable').select('*').eq('user_id', userId);
 
 		if (incomesError) {
 			console.error('Błąd przy pobieraniu przychodów:', incomesError);
 		} else {
 			setIncomes(incomesData);
+			
+			const totalSavings = incomesData.reduce((acc, item) => acc + parseFloat(item.savings || 0), 0);
+			setSavings(totalSavings); // Aktualizuj stan sumą oszczędności
 		}
 
 		// Zakładając, że pole 'savings' istnieje i jest liczbą; oblicz sumę
-		const totalSavings = incomesData.reduce((acc, item) => acc + parseFloat(item.savings || 0), 0);
-		setSavings(totalSavings); // Aktualizuj stan sumą oszczędności
 	};
 
 	// Pobierz dane z Supabase przy pierwszym renderowaniu

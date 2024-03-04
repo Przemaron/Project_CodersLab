@@ -20,11 +20,20 @@ const DashboardPieChart = () => {
 		const fetchData = async () => {
 			const currentYear = new Date().getFullYear();
 			const currentMonth = new Date().getMonth();
+			const { data: { user } } = await supabase.auth.getUser();
+
+			if (!user) {
+                console.error('Brak zalogowanego użytkownika');
+                return;
+            }
+
+            const userId = user.id;
 
 			// Pobieranie wydatków
 			const { data: expensesData } = await supabase
 				.from('expensesTable')
 				.select('*')
+				.eq('user_id', userId)
 				.gte('date', new Date(currentYear, currentMonth, 1).toISOString())
 				.lte('date', new Date(currentYear, currentMonth + 1, 0).toISOString());
 
@@ -32,6 +41,7 @@ const DashboardPieChart = () => {
 			const { data: incomesData } = await supabase
 				.from('incomeTable')
 				.select('remaining')
+				.eq('user_id', userId)
 				.gte('date', new Date(currentYear, currentMonth, 1).toISOString())
 				.lte('date', new Date(currentYear, currentMonth + 1, 0).toISOString());
 

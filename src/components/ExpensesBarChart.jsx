@@ -38,6 +38,16 @@ const ExpensesBarChart = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
+			const {
+				data: { user },
+			} = await supabase.auth.getUser();
+
+			if (!user) {
+				console.error('Brak zalogowanego użytkownika');
+				return;
+			}
+			const userId = user.id;
+
 			const currentYear = new Date().getFullYear();
 			const currentMonth = new Date().getMonth();
 
@@ -45,6 +55,7 @@ const ExpensesBarChart = () => {
 			const { data: expensesData } = await supabase
 				.from('expensesTable')
 				.select('*')
+				.eq('user_id', userId)
 				.gte('date', new Date(currentYear, currentMonth, 1).toISOString())
 				.lte('date', new Date(currentYear, currentMonth + 1, 0).toISOString());
 
@@ -52,6 +63,7 @@ const ExpensesBarChart = () => {
 			const { data: incomesData } = await supabase
 				.from('incomeTable')
 				.select('*')
+				.eq	('user_id', userId)
 				.gte('date', new Date(currentYear, currentMonth, 1).toISOString())
 				.lte('date', new Date(currentYear, currentMonth + 1, 0).toISOString());
 
@@ -64,7 +76,7 @@ const ExpensesBarChart = () => {
 				acc[category] = (acc[category] || 0) + amount;
 				return acc;
 			}, {});
-			
+
 			const categories = Object.keys(expensesByCategory);
 			const expensesSums = Object.values(expensesByCategory);
 			const expenseColors = categories.map((_, index) => generateExpenseColor(index));
@@ -129,7 +141,7 @@ const ExpensesBarChart = () => {
 			},
 			title: {
 				display: true,
-				text: (`Przychody i bieżące wydatki według kategorii`),
+				text: `Przychody i bieżące wydatki według kategorii`,
 				font: {
 					size: 30,
 					family: 'Poppins, sans-serif',

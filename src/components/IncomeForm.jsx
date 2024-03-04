@@ -6,9 +6,28 @@ const IncomeForm = ({ addSavings }) => {
 	const [income, setIncome] = useState('');
 	const [savingsRate, setSavingsRate] = useState('');
 	const [monthlyIncomeTotal, setMonthlyIncomeTotal] = useState(0);
+	const [userId, setUserId] = useState(null);
+
+	useEffect(() => {
+		// Definicja asynchronicznej funkcji wewnątrz useEffect
+		const fetchUser = async () => {
+			const { data: session } = await supabase.auth.getSession();
+			const { data: userResponse } = await supabase.auth.getUser();
+			const user = session?.user || userResponse?.user;
+
+			if (user) {
+				console.log(user);
+				setUserId(user.id);
+				fetchMonthlyIncomeTotal(user.id);
+			}
+		};
+
+		// Wywołanie asynchronicznej funkcji
+		fetchUser();
+	}, []);
 
 	// Funkcja do pobierania sumy przychodów w bieżącym miesiącu
-	const fetchMonthlyIncomeTotal = async () => {
+	const fetchMonthlyIncomeTotal = async userId => {
 		const today = new Date();
 		const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
 		const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
@@ -17,7 +36,8 @@ const IncomeForm = ({ addSavings }) => {
 			.from('incomeTable')
 			.select('amount')
 			.gte('date', firstDayOfMonth)
-			.lte('date', lastDayOfMonth);
+			.lte('date', lastDayOfMonth)
+			.eq('user_id', userId);
 
 		if (error) {
 			console.error('Błąd przy pobieraniu sumy przychodów:', error);
@@ -26,48 +46,44 @@ const IncomeForm = ({ addSavings }) => {
 			setMonthlyIncomeTotal(total);
 		}
 	};
-	useEffect(() => {
-		fetchMonthlyIncomeTotal();
-	}, []);
 
 	const handleSubmit = async e => {
 		e.preventDefault();
 
+		if (!userId) {
+			console.error('Błąd: Brak identyfikatora użytkownika.');
+			return;
+		}
+
 		// Zapisz przychód w bazie danych
 		const formattedDate = new Date().toISOString().split('T')[0];
-
 		const numericIncome = parseFloat(income);
-		const numericSavingsRate = parseFloat(savingsRate) / 100; // Konwersja procentu na ułamek
+		const numericSavingsRate = parseFloat(savingsRate) / 100;
 		const savings = numericIncome * numericSavingsRate;
-		const remainingIncome = (numericIncome - savings);
-		console.log(remainingIncome);
+		const remainingIncome = numericIncome - savings;
 
-		const { data, error } = await supabase
-			.from('incomeTable')
-			.insert([
-				{
-					amount: numericIncome,
-					savingsRate: savingsRate,
-					date: formattedDate,
-					savings: savings,
-					remaining: remainingIncome,
-				},
-			]);
+		const { data, error } = await supabase.from('incomeTable').insert([
+			{
+				user_id: userId,
+				amount: numericIncome,
+				savingsRate: savingsRate,
+				date: formattedDate,
+				savings: savings,
+				remaining: remainingIncome,
+			},
+		]);
 
 		if (error) {
 			console.error('Błąd przy zapisie przychodu:', error);
 		} else {
-			fetchMonthlyIncomeTotal();
 			console.log('Przychód zapisany pomyślnie:', data);
+			fetchMonthlyIncomeTotal(userId);
 			if (addSavings) {
 				addSavings(parseFloat(income), parseFloat(savingsRate));
 			}
-			// Odśwież sumę przychodów po dodaniu nowego przychodu
-			fetchMonthlyIncomeTotal();
+			setIncome('');
+			setSavingsRate('');
 		}
-
-		setIncome('');
-		setSavingsRate('');
 	};
 
 	return (

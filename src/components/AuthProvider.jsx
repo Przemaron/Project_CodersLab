@@ -10,33 +10,32 @@ export const AuthProvider = ({ children }) => {
 		const session = supabase.auth.getSession();
 		setUser(session?.user || null);
 		//
-		const { data: authListener } = supabase.auth.onAuthStateChange(async (_event, session) => {
-			const currentUser = session?.user;
-			setUser(currentUser || null);
+		const { data: authListener } = supabase.auth.onAuthStateChange(async (_event, session) => {setUser(session?.user || null);
 
 			// Jeśli użytkownik jest zalogowany, zapisz jego nazwę do tabeli profiles
-			if (currentUser) {
+			if (session?.user) {
 				const name = localStorage.getItem('newUserName');
 				if (name) {
-					const { error: insertError } = await supabase
+					supabase
 						.from('profiles')
-						.insert([{ user_id: currentUser.id, name: name }]);
-
-					if (insertError) {
-						console.error('Error inserting to profiles:', insertError);
-						throw insertError;
-					}
-
-					// Usuń nazwę użytkownika z localStorage po zapisaniu do tabeli profiles
-					localStorage.removeItem('newUserName');
+						.insert([{ user_id: session.user.id, name: name }])
+						.then(({ error }) => {
+                            if (error) {
+                                console.error('Error inserting to profiles:', error);
+                            } else {
+                                // Usuń nazwę użytkownika z localStorage po zapisaniu do tabeli profiles
+                                localStorage.removeItem('newUserName');
+                            }
+                        });
 				}
 			}
 		});
 
 		return () => {
-			authListener?.unsubscribe();
-		};
-	}, []);
+            authListener.unsubscribe;
+        };
+    }, []);
+	
 	// Rejestracja użytkownika
 	const signUp = async (name, email, password) => {
 		// Próba rejestracji użytkownika
